@@ -1,40 +1,42 @@
 import { FC, useEffect } from 'react'
+
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../redux/redux-hooks/redux-hooks'
-import {
-  selectCalendar,
-  selectDateTable,
-  setWeeksTable,
-} from '../../redux/slices/calendarSlice'
+
+import { setWeeksTable } from '../../redux/slices/calendar-slice/calendar-slice'
 
 import CellTable from '../cell-table-calendar/cell-table.component'
 
 import { Table } from 'react-bootstrap'
+import {
+  selectCalendar,
+  selectDateTable,
+} from '../../redux/slices/calendar-slice/calendar-selectors'
 
 const TableCalendar: FC = () => {
   const dispatch = useAppDispatch()
   const { monthTable, yearTable } = useAppSelector(selectDateTable)
-  const { weekdays, weeksTable } = useAppSelector(selectCalendar)
+  const { namesOfweekdays, weeksTable } = useAppSelector(selectCalendar)
 
   useEffect(() => {
     dispatch(setWeeksTable({ month: monthTable, year: yearTable }))
   }, [dispatch, monthTable, yearTable])
 
   return (
-    <Table bordered>
+    <Table borderless>
       <thead>
         <tr>
-          {weekdays.map((weekday, index) => (
-            <th key={index}>{weekday}</th>
+          {namesOfweekdays.map((nameOfweekday, index) => (
+            <th key={index}>{nameOfweekday}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {weeksTable.map((week, id) => (
+        {weeksTable.map(({ weekdays, id }) => (
           <tr key={id}>
-            {week.weekdays.map(day => (
+            {weekdays.map(day => (
               <CellTable key={day.id} {...day} />
             ))}
           </tr>

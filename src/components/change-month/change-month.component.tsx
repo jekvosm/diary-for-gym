@@ -1,14 +1,19 @@
 import { FC } from 'react'
+
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../redux/redux-hooks/redux-hooks'
+
 import {
   decreaseMonth,
   increaseMonth,
-  selectDateTable,
+} from '../../redux/slices/calendar-slice/calendar-slice'
+
+import {
   selectCalendar,
-} from '../../redux/slices/calendarSlice'
+  selectDateTable,
+} from '../../redux/slices/calendar-slice/calendar-selectors'
 
 import { Col } from 'react-bootstrap'
 

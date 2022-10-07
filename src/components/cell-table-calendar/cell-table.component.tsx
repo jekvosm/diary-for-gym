@@ -1,23 +1,39 @@
 import { FC } from 'react'
-import { useAppSelector } from '../../redux/redux-hooks/redux-hooks'
+
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../redux/redux-hooks/redux-hooks'
+
+import { setActiveDay } from '../../redux/slices/calendar-slice/calendar-slice'
+
 import {
   selectDateTable,
   selectDayToday,
-} from '../../redux/slices/calendarSlice'
+} from '../../redux/slices/calendar-slice/calendar-selectors'
 
 interface CellTableProps {
   dayValue: number
   whichMonth: string
   id: number
+  isActive: boolean
 }
 
-const CellTable: FC<CellTableProps> = ({ dayValue, whichMonth, id }) => {
+const CellTable: FC<CellTableProps> = ({
+  dayValue,
+  whichMonth,
+  id,
+  isActive,
+}) => {
+  const dispatch = useAppDispatch()
   const { dayNow, monthNowValue, yearNow } = useAppSelector(selectDayToday)
   const { monthTable, yearTable } = useAppSelector(selectDateTable)
 
+  const setActiveDayHandler = () => dispatch(setActiveDay(id))
+
   return (
     <td
-      // onClick={setActiveDayHandler}
+      onClick={setActiveDayHandler}
       className={`${whichMonth} ${
         dayValue === dayNow &&
         monthTable === monthNowValue &&
@@ -25,7 +41,7 @@ const CellTable: FC<CellTableProps> = ({ dayValue, whichMonth, id }) => {
         whichMonth === 'month-in-table'
           ? 'active'
           : ''
-      }`}
+      } ${isActive ? 'active' : ''}`}
     >
       {dayValue}
     </td>

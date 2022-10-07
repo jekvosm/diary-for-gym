@@ -1,5 +1,5 @@
 import { useAppSelector } from '../../redux/redux-hooks/redux-hooks'
-import { selectDayToday } from '../../redux/slices/calendarSlice'
+import { selectDayToday } from '../../redux/slices/calendar-slice/calendar-selectors'
 
 import { Col } from 'react-bootstrap'
 
