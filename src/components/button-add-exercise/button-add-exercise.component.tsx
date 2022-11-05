@@ -9,9 +9,13 @@ import { Button, Col } from 'react-bootstrap'
 const ButtonAddExercise: FC = () => {
   const dispatch = useAppDispatch()
 
+  const openModalHandler = () => {
+    dispatch(openModal())
+  }
+
   return (
     <Col className='flex-grow-0 fs-4'>
-      <Button onClick={() => dispatch(openModal())}>Add Exercise</Button>
+      <Button onClick={openModalHandler}>Add Exercise</Button>
     </Col>
   )
 }

@@ -7,7 +7,7 @@ import Set from '../set/set.component'
 import { Col, Row } from 'react-bootstrap'
 
 const Sets: FC = () => {
-  const { currentSets } = useAppSelector(state => state.workout)
+  const { currentExercise } = useAppSelector(state => state.workout)
 
   return (
     <Fragment>
@@ -24,11 +24,14 @@ const Sets: FC = () => {
         <Col>
           <span>Reps</span>
         </Col>
+        <Col>
+          <span>Edit</span>
+        </Col>
       </Row>
       <Row>
         <Col>
-          {currentSets.length ? (
-            currentSets.map(currentSet => (
+          {currentExercise?.sets.length ? (
+            currentExercise.sets.map(currentSet => (
               <Set key={currentSet.id} set={currentSet} />
             ))
           ) : (

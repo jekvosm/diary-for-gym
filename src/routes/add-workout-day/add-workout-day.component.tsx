@@ -4,6 +4,7 @@ import WorkoutDate from '../../components/workout-date/workout-date.component'
 import Exercises from '../../components/exercises/exercises.component'
 import ButtonAddExercise from '../../components/button-add-exercise/button-add-exercise.component'
 import ModalAddExercise from '../../components/modal-add-exetcise/modal-add-exercise.component'
+import ButtonSaveWorkoutDay from '../../components/button-save-woorkout-day/button-save-workout-day.component'
 
 import { Container, Row, Col } from 'react-bootstrap'
 
@@ -24,7 +25,8 @@ const AddWorkoutDay: FC = () => {
         <Exercises />
       </Row>
 
-      <Row className='text-nowrap justify-content-end'>
+      <Row className='text-nowrap justify-content-between mb-5'>
+        <ButtonSaveWorkoutDay />
         <ButtonAddExercise />
       </Row>
 

@@ -11,7 +11,7 @@ interface ExerciseProps {
 }
 
 const Exercise: FC<ExerciseProps> = ({ exercise }) => {
-  const { title } = exercise
+  const { title, sets } = exercise
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
@@ -26,7 +26,14 @@ const Exercise: FC<ExerciseProps> = ({ exercise }) => {
       className='mb-2 fs-4'
       style={{ cursor: 'pointer' }}
     >
-      {title}
+      <h3>
+        {exercise.id}. {title}
+      </h3>
+      {sets.map(set => (
+        <div key={set.id}>
+          {set.weight}x{set.reps}
+        </div>
+      ))}
     </li>
   )
 }

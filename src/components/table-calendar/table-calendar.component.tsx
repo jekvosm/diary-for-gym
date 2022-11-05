@@ -5,24 +5,42 @@ import {
   useAppSelector,
 } from '../../redux/redux-hooks/redux-hooks'
 
-import { setWeeksTable } from '../../redux/slices/calendar-slice/calendar-slice'
+import {
+  setDayIsActive,
+  setWeeksTable,
+} from '../../redux/slices/calendar-slice/calendar-slice'
 
 import CellTable from '../cell-table-calendar/cell-table.component'
 
 import { Table } from 'react-bootstrap'
 import {
+  selectActiveDate,
   selectCalendar,
   selectDateTable,
 } from '../../redux/slices/calendar-slice/calendar-selectors'
 
 const TableCalendar: FC = () => {
   const dispatch = useAppDispatch()
-  const { monthTable, yearTable } = useAppSelector(selectDateTable)
+
+  const {
+    monthTable: { monthTableValue },
+    yearTable,
+  } = useAppSelector(selectDateTable)
   const { namesOfweekdays, weeksTable } = useAppSelector(selectCalendar)
+  const activeDate = useAppSelector(selectActiveDate)
 
   useEffect(() => {
-    dispatch(setWeeksTable({ month: monthTable, year: yearTable }))
-  }, [dispatch, monthTable, yearTable])
+    dispatch(
+      setWeeksTable({
+        month: monthTableValue,
+        year: yearTable,
+      })
+    )
+  }, [dispatch, monthTableValue, yearTable])
+
+  useEffect(() => {
+    dispatch(setDayIsActive(activeDate))
+  }, [activeDate, dispatch])
 
   return (
     <Table borderless>
@@ -37,7 +55,7 @@ const TableCalendar: FC = () => {
         {weeksTable.map(({ weekdays, id }) => (
           <tr key={id}>
             {weekdays.map(day => (
-              <CellTable key={day.id} {...day} />
+              <CellTable key={day.id} day={day} />
             ))}
           </tr>
         ))}

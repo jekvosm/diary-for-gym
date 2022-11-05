@@ -1,52 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
 import {
   createArrayOfWeeks,
+  MONTHS,
   setInitialState,
+  updateActiveDate,
+  updateActiveDay,
 } from '../../../utils/calendar.utils'
 
-export interface MonthAndYear {
-  month: number
-  year: number
-}
-
-export interface Day {
-  id: number
-  dayValue: number
-  whichMonth: string
-  isActive: boolean
-}
-
-export interface Week {
-  id: number
-  weekdays: Day[]
-}
-
-export interface CalendarState {
-  dateNow: {
-    dayNow: number
-    monthNow: {
-      monthNowValue: number
-      nameMonthNow: string
-    }
-    yearNow: number
-    weekdayNow: {
-      weekdayNowValue: number
-      nameWeekdayNow: string
-    }
-  }
-
-  dateTable: {
-    dayTable: number
-    monthTable: number
-    yearTable: number
-  }
-
-  weeksTable: Week[]
-
-  namesOfweekdays: string[]
-
-  months: string[]
-}
+import { ActiveDate, DayForActiveDate, MonthAndYear } from './calendar-types'
 
 export const calendarSlice = createSlice({
   name: 'calendarSlice',
@@ -56,61 +18,80 @@ export const calendarSlice = createSlice({
       state.weeksTable = createArrayOfWeeks(action.payload)
     },
 
+    setDayToday: (state, action: PayloadAction<MonthAndYear>) => {
+      // state.weeksTable = createArrayOfWeeks(action.payload)
+      state.dateTable.monthTable.monthTableValue = action.payload.month
+      state.dateTable.yearTable = action.payload.year
+    },
+
     decreaseMonth: state => {
-      const { monthTable, yearTable } = state.dateTable
-      if (monthTable === 1) {
+      const {
+        monthTable: { monthTableValue },
+        yearTable,
+      } = state.dateTable
+
+      if (monthTableValue === 1) {
         state.dateTable = {
           ...state.dateTable,
-          monthTable: 12,
+          monthTable: {
+            monthTableValue: 12,
+            nameMonthTable: MONTHS[11],
+          },
           yearTable: yearTable - 1,
         }
       } else {
         state.dateTable = {
           ...state.dateTable,
-          monthTable: monthTable - 1,
+          monthTable: {
+            monthTableValue: monthTableValue - 1,
+            nameMonthTable: MONTHS[monthTableValue],
+          },
         }
       }
     },
 
     increaseMonth: state => {
-      const { monthTable, yearTable } = state.dateTable
-      if (monthTable === 12) {
+      const {
+        monthTable: { monthTableValue },
+        yearTable,
+      } = state.dateTable
+      if (monthTableValue === 12) {
         state.dateTable = {
           ...state.dateTable,
-          monthTable: 1,
+          monthTable: {
+            monthTableValue: 1,
+            nameMonthTable: MONTHS[0],
+          },
           yearTable: yearTable + 1,
         }
       } else {
         state.dateTable = {
           ...state.dateTable,
-          monthTable: monthTable + 1,
+          monthTable: {
+            monthTableValue: monthTableValue + 1,
+            nameMonthTable: MONTHS[monthTableValue],
+          },
         }
       }
     },
 
-    setActiveDay: (state, action: PayloadAction<number>) => {
-      state.weeksTable = state.weeksTable.map(week => {
-        return {
-          ...week,
-          weekdays: week.weekdays.map(day => {
-            if (day.id === action.payload) {
-              return {
-                ...day,
-                isActive: true,
-              }
-            }
-            return {
-              ...day,
-              isActive: false,
-            }
-          }),
-        }
-      })
+    setActiveDate: (state, action: PayloadAction<DayForActiveDate>) => {
+      state.activeDate = updateActiveDate(action.payload)
+    },
+
+    setDayIsActive: (state, action: PayloadAction<ActiveDate>) => {
+      state.weeksTable = updateActiveDay(state.weeksTable, action.payload)
     },
   },
 })
 
-export const { decreaseMonth, increaseMonth, setWeeksTable, setActiveDay } =
-  calendarSlice.actions
+export const {
+  decreaseMonth,
+  increaseMonth,
+  setWeeksTable,
+  setActiveDate,
+  setDayIsActive,
+  setDayToday,
+} = calendarSlice.actions
 
 export default calendarSlice.reducer

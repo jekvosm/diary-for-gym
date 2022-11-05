@@ -29,9 +29,14 @@ body {
   }
 
   td {
-    &.active {
+    &.active-cell {
       background-color: $cyan;
     }
+
+    &.today-cell {
+      background-color: $success;
+    }
+
     &:hover {
       background-color: $cyan;
     }

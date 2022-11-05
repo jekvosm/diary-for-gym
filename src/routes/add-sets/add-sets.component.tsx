@@ -1,3 +1,4 @@
+import React from 'react'
 import { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,43 +9,55 @@ import {
 
 import Sets from '../../components/sets/sets.component'
 
-import { Button, Card, Col, Container, Row } from 'react-bootstrap'
 import {
-  addCurrentSets,
-  removeFromCurrentSets,
+  addSet,
+  removeCurrentExercise,
+  removeFromSets,
+  saveSets,
 } from '../../redux/slices/workout-slice/workout-slice'
+
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 
 const AddSets: FC = () => {
   const dispatch = useAppDispatch()
   const { currentExercise } = useAppSelector(state => state.workout)
+
   const navigate = useNavigate()
 
   useEffect(() => {
     if (!currentExercise) {
       navigate('/add-workout-day')
-      return
     }
   }, [navigate, currentExercise])
 
   const addSetHandler = () => {
-    dispatch(addCurrentSets())
+    dispatch(addSet())
   }
 
   const removeSetHandler = () => {
-    dispatch(removeFromCurrentSets())
+    dispatch(removeFromSets())
+  }
+
+  const saveSubmitHandler = (event: React.FormEvent) => {
+    event.preventDefault()
+    navigate('/add-workout-day')
+    dispatch(saveSets())
+    dispatch(removeCurrentExercise())
   }
 
   return (
     <Container>
       <Row className='justify-content-center'>
         <Col className='flex-grow-0'>
-          <Card style={{ width: '24rem' }} className='mb-3'>
+          <Card style={{ width: '32rem' }} className='mb-3'>
             <Card.Header className='text-center'>
               <h2>{currentExercise?.title}</h2>
             </Card.Header>
 
             <Card.Body className='text-center'>
-              <Sets />
+              <Form onSubmit={saveSubmitHandler} id='sets'>
+                <Sets />
+              </Form>
             </Card.Body>
           </Card>
           <Row className='text-nowrap justify-content-between m-0'>
@@ -54,7 +67,9 @@ const AddSets: FC = () => {
               </Button>
             </Col>
             <Col className='flex-grow-0'>
-              <Button variant='success'>Save sets</Button>
+              <Button type='submit' variant='success' form='sets'>
+                Save sets
+              </Button>
             </Col>
             <Col className='flex-grow-0'>
               <Button onClick={addSetHandler}>Add set</Button>

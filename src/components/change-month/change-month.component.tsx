@@ -19,18 +19,30 @@ import { Col } from 'react-bootstrap'
 
 const ChangeMonth: FC = () => {
   const dispatch = useAppDispatch()
-  const { monthTable, yearTable } = useAppSelector(selectDateTable)
+  const {
+    monthTable: { monthTableValue },
+    yearTable,
+  } = useAppSelector(selectDateTable)
   const { months } = useAppSelector(selectCalendar)
+
+  const decreaseHandler = () => {
+    dispatch(decreaseMonth())
+  }
+
+  const increaseHandler = () => {
+    dispatch(increaseMonth())
+  }
 
   return (
     <>
-      <Col className='flex-grow-0' onClick={() => dispatch(decreaseMonth())}>
+      <Col className='flex-grow-0' onClick={decreaseHandler}>
         <p>{'<'}</p>
       </Col>
       <Col>
-        <p>{`${months[monthTable - 1]} ${yearTable}`}</p>
+        <p>{`${months[monthTableValue - 1]} 
+        ${yearTable}`}</p>
       </Col>
-      <Col className='flex-grow-0' onClick={() => dispatch(increaseMonth())}>
+      <Col className='flex-grow-0' onClick={increaseHandler}>
         <p>{'>'}</p>
       </Col>
     </>

@@ -1,13 +1,17 @@
+import React from 'react'
 import { FC, useState, useEffect } from 'react'
 
 import { useAppDispatch } from '../../redux/redux-hooks/redux-hooks'
 
 import {
-  changeCurrentSets,
+  changeSets,
   SetState,
 } from '../../redux/slices/workout-slice/workout-slice'
 
-import { Col, Row } from 'react-bootstrap'
+import { ReactComponent as CheckSvg } from '../../assets/check.svg'
+import { ReactComponent as EditSvg } from '../../assets/pencil.svg'
+
+import { Col, Form, Row } from 'react-bootstrap'
 
 interface SetProps {
   set: SetState
@@ -18,13 +22,14 @@ const Set: FC<SetProps> = ({ set }) => {
   const { weight, reps, id } = set
   const [newWeight, setNewWeight] = useState(weight)
   const [newReps, setNewReps] = useState(reps)
+  const [readOnly, setReadOnly] = useState(true)
 
   useEffect(() => {
-    dispatch(changeCurrentSets({ ...set, reps: newReps }))
+    dispatch(changeSets({ ...set, reps: newReps }))
   }, [newReps, dispatch])
 
   useEffect(() => {
-    dispatch(changeCurrentSets({ ...set, weight: newWeight }))
+    dispatch(changeSets({ ...set, weight: newWeight }))
   }, [newWeight, dispatch])
 
   const onChangeReps = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,18 +40,23 @@ const Set: FC<SetProps> = ({ set }) => {
     setNewWeight(Number(event.target.value))
   }
 
+  const readOnlyHandler = () => {
+    setReadOnly(prev => !prev)
+  }
+
   return (
-    <Row className='mb-3'>
+    <Form.Group as={Row} className='mb-3 align-items-center text-center'>
       <Col>
         <span>{id}.</span>
       </Col>
       <Col>
-        <input
+        <Form.Control
           onChange={onChangeWeight}
           type='text'
           defaultValue={`${weight}`}
           className='w-75 text-center'
-          readOnly={false}
+          plaintext={readOnly}
+          readOnly={readOnly}
           maxLength={4}
         />
       </Col>
@@ -54,16 +64,24 @@ const Set: FC<SetProps> = ({ set }) => {
         <span>x</span>
       </Col>
       <Col>
-        <input
+        <Form.Control
           onChange={onChangeReps}
           type='text'
           defaultValue={`${reps}`}
           className='w-75 text-center'
-          readOnly={false}
+          plaintext={readOnly}
+          readOnly={readOnly}
           maxLength={2}
         />
       </Col>
-    </Row>
+      <Col onClick={readOnlyHandler}>
+        {readOnly ? (
+          <EditSvg style={{ width: '30px', height: '30px' }} />
+        ) : (
+          <CheckSvg style={{ width: '30px', height: '30px' }} />
+        )}
+      </Col>
+    </Form.Group>
   )
 }
 

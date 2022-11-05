@@ -1,9 +1,11 @@
 import {
+  ActiveDate,
   CalendarState,
   Day,
+  DayForActiveDate,
   MonthAndYear,
   Week,
-} from '../redux/slices/calendar-slice/calendar-slice'
+} from '../redux/slices/calendar-slice/calendar-types'
 
 export const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 export const MONTHS = [
@@ -21,7 +23,13 @@ export const MONTHS = [
   'Декабрь',
 ]
 
-export const createArrayOfWeeks = ({ year, month }: MonthAndYear) => {
+export enum whichMonth {
+  monthBefore = 'month-before',
+  monthInTable = 'month-in-table',
+  monthAfter = 'month-after',
+}
+
+export const createArrayOfWeeks = ({ year, month }: MonthAndYear): Week[] => {
   const daysForTable = createDaysForTable(year, month)
 
   let week: Week = {
@@ -51,7 +59,7 @@ export const createArrayOfWeeks = ({ year, month }: MonthAndYear) => {
   return Array.from(new Set(arrayOfWeeks))
 }
 
-export function createDaysForTable(year: number, month: number) {
+export function createDaysForTable(year: number, month: number): Day[] {
   const daysForTable: Day[] = []
 
   const dateNow = new Date(year, month - 1)
@@ -65,7 +73,7 @@ export function createDaysForTable(year: number, month: number) {
     const dayTable: Day = {
       id: i + 1,
       dayValue: dayBefore - weekdayStartMonth + i + 1,
-      whichMonth: 'month-before',
+      whichMonthInTable: whichMonth.monthBefore,
       isActive: false,
     }
 
@@ -82,7 +90,7 @@ export function createDaysForTable(year: number, month: number) {
     const dayTable: Day = {
       id: i + weekdayStartMonth,
       dayValue: i,
-      whichMonth: 'month-in-table',
+      whichMonthInTable: whichMonth.monthInTable,
       isActive: false,
     }
 
@@ -91,12 +99,22 @@ export function createDaysForTable(year: number, month: number) {
       : daysForTable.push({
           ...dayTable,
           dayValue: i - dayEndMonth,
-          whichMonth: 'month-after',
+          whichMonthInTable: whichMonth.monthAfter,
           isActive: false,
         })
   }
 
   return daysForTable
+}
+
+export const changeMonthName = (month: string): string => {
+  const lastChar = month.at(-1)
+
+  if (lastChar === 'т') {
+    return month + 'а'
+  }
+
+  return month.slice(0, -1) + 'я'
 }
 
 export const setInitialState = (): CalendarState => {
@@ -135,7 +153,10 @@ export const setInitialState = (): CalendarState => {
 
     dateTable: {
       dayTable: day,
-      monthTable: monthValue + 1,
+      monthTable: {
+        monthTableValue: monthValue + 1,
+        nameMonthTable: nameMonth,
+      },
       yearTable: year,
     },
 
@@ -144,5 +165,49 @@ export const setInitialState = (): CalendarState => {
     namesOfweekdays: WEEKDAYS,
 
     months: MONTHS,
+
+    activeDate: {
+      id: `${year}-${monthValue + 1}-${day}`,
+      activeDay: day,
+      activeMonthValue: monthValue + 1,
+      activeMonthName: MONTHS[monthValue],
+      activeYear: year,
+    },
   }
+}
+
+export const updateActiveDate = (date: DayForActiveDate): ActiveDate => {
+  return {
+    id: `${date.yearTable}-${date.monthTableValue}-${date.dayValue}`,
+    activeDay: date.dayValue,
+    activeMonthValue: date.monthTableValue,
+    activeMonthName: MONTHS[date.monthTableValue - 1],
+    activeYear: date.yearTable,
+  }
+}
+
+export const updateActiveDay = (
+  weeksTable: Week[],
+  activeDate: ActiveDate
+): Week[] => {
+  return weeksTable.map(week => {
+    return {
+      ...week,
+      weekdays: week.weekdays.map(day => {
+        if (
+          day.dayValue === activeDate.activeDay &&
+          day.whichMonthInTable === whichMonth.monthInTable
+        ) {
+          return {
+            ...day,
+            isActive: true,
+          }
+        }
+        return {
+          ...day,
+          isActive: false,
+        }
+      }),
+    }
+  })
 }

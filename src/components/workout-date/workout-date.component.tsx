@@ -1,15 +1,24 @@
-import { Col } from 'react-bootstrap'
+import { useMemo } from 'react'
+
 import { useAppSelector } from '../../redux/redux-hooks/redux-hooks'
-import { selectDayToday } from '../../redux/slices/calendar-slice/calendar-selectors'
+import { selectActiveDate } from '../../redux/slices/calendar-slice/calendar-selectors'
+
+import { changeMonthName } from '../../utils/calendar.utils'
+
+import { Col } from 'react-bootstrap'
 
 const WorkoutDate = () => {
-  const { dayNow, nameMonthNow, yearNow } = useAppSelector(selectDayToday)
+  const { activeDay, activeMonthName, activeYear } =
+    useAppSelector(selectActiveDate)
+
+  const monthName = useMemo(
+    () => changeMonthName(activeMonthName),
+    [activeMonthName]
+  )
 
   return (
     <Col className='mb-4'>
-      <h3 className='text-center'>{`${dayNow} ${
-        nameMonthNow.slice(0, -1) + 'я'
-      } ${yearNow} г.`}</h3>
+      <h3 className='text-center'>{`${activeDay} ${monthName.toLowerCase()} ${activeYear} г.`}</h3>
     </Col>
   )
 }

@@ -1,47 +1,81 @@
-import { FC } from 'react'
+import { FC, useCallback } from 'react'
 
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../redux/redux-hooks/redux-hooks'
 
-import { setActiveDay } from '../../redux/slices/calendar-slice/calendar-slice'
+import {
+  decreaseMonth,
+  increaseMonth,
+  setActiveDate,
+} from '../../redux/slices/calendar-slice/calendar-slice'
 
 import {
   selectDateTable,
   selectDayToday,
 } from '../../redux/slices/calendar-slice/calendar-selectors'
 
+import { Day } from '../../redux/slices/calendar-slice/calendar-types'
+
+import { whichMonth } from '../../utils/calendar.utils'
+
 interface CellTableProps {
-  dayValue: number
-  whichMonth: string
-  id: number
-  isActive: boolean
+  day: Day
 }
 
-const CellTable: FC<CellTableProps> = ({
-  dayValue,
-  whichMonth,
-  id,
-  isActive,
-}) => {
-  const dispatch = useAppDispatch()
-  const { dayNow, monthNowValue, yearNow } = useAppSelector(selectDayToday)
-  const { monthTable, yearTable } = useAppSelector(selectDateTable)
+const CellTable: FC<CellTableProps> = ({ day }) => {
+  const { dayValue, whichMonthInTable, isActive } = day
 
-  const setActiveDayHandler = () => dispatch(setActiveDay(id))
+  const dispatch = useAppDispatch()
+
+  const { dayNow, monthNowValue, yearNow } = useAppSelector(selectDayToday)
+  const {
+    monthTable: { monthTableValue, nameMonthTable },
+    yearTable,
+  } = useAppSelector(selectDateTable)
+
+  const setActiveDayHandler = useCallback(() => {
+    if (whichMonthInTable === whichMonth.monthBefore) {
+      dispatch(decreaseMonth())
+      dispatch(
+        setActiveDate({ dayValue, monthTableValue, yearTable, nameMonthTable })
+      )
+      return
+    }
+
+    if (whichMonthInTable === whichMonth.monthAfter) {
+      dispatch(increaseMonth())
+      dispatch(
+        setActiveDate({ dayValue, monthTableValue, yearTable, nameMonthTable })
+      )
+      return
+    }
+
+    dispatch(
+      setActiveDate({ dayValue, monthTableValue, yearTable, nameMonthTable })
+    )
+  }, [
+    dayValue,
+    monthTableValue,
+    yearTable,
+    dispatch,
+    whichMonthInTable,
+    nameMonthTable,
+  ])
 
   return (
     <td
       onClick={setActiveDayHandler}
-      className={`${whichMonth} ${
+      className={`${whichMonthInTable} ${
         dayValue === dayNow &&
-        monthTable === monthNowValue &&
+        monthTableValue === monthNowValue &&
         yearNow === yearTable &&
-        whichMonth === 'month-in-table'
-          ? 'active'
+        whichMonthInTable === whichMonth.monthInTable &&
+        !isActive
+          ? 'today-cell'
           : ''
-      } ${isActive ? 'active' : ''}`}
+      } ${isActive ? 'active-cell' : ''}`}
     >
       {dayValue}
     </td>
