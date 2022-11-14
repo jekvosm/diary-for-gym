@@ -1,8 +1,8 @@
 import { FC } from 'react'
 
-import { useAppDispatch } from '../../redux/redux-hooks/redux-hooks'
+import { useAppDispatch } from '../../store/redux-hooks/redux-hooks'
 
-import { openModal } from '../../redux/slices/workout-slice/workout-slice'
+import { openModal } from '../../store/slices/workout/workout-slice'
 
 import { Button, Col } from 'react-bootstrap'
 

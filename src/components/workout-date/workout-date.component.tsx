@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
-import { useAppSelector } from '../../redux/redux-hooks/redux-hooks'
-import { selectActiveDate } from '../../redux/slices/calendar-slice/calendar-selectors'
+import { useAppSelector } from '../../store/redux-hooks/redux-hooks'
+import { selectActiveDate } from '../../store/slices/calendar/calendar-selectors'
 
 import { changeMonthName } from '../../utils/calendar.utils'
 

@@ -1,8 +1,8 @@
 import { FC } from 'react'
 
-import DayToday from '../day-today/day-today-component'
-import ChangeMonth from '../change-month/change-month.component'
-import TableCalendar from '../table-calendar/table-calendar.component'
+import DayToday from '../calendar-day-today/calendar-day-today.component'
+import CalendarChangeMonth from '../calendar-change-month/calendar-change-month.component'
+import CalendarTable from '../calendar-table/calendar-table.component'
 import ButtonAddDay from '../button-add-day/button-add-day.component'
 
 import { Container, Row } from 'react-bootstrap'
@@ -15,11 +15,11 @@ const Calendar: FC = () => {
       </Row>
 
       <Row className='fs-4 text-center'>
-        <ChangeMonth />
+        <CalendarChangeMonth />
       </Row>
 
       <Row className='text-center'>
-        <TableCalendar />
+        <CalendarTable />
       </Row>
 
       <Row className='justify-content-end text-nowrap'>

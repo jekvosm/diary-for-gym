@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom'
 import {
   useAppDispatch,
   useAppSelector,
-} from '../../redux/redux-hooks/redux-hooks'
+} from '../../store/redux-hooks/redux-hooks'
 
-import { selectActiveDate } from '../../redux/slices/calendar-slice/calendar-selectors'
-import { setWorkoutDay } from '../../redux/slices/workout-slice/workout-slice'
+import { selectActiveDate } from '../../store/slices/calendar/calendar-selectors'
+import { setWorkoutDay } from '../../store/slices/workout/workout-slice'
 
 import { Button, Col } from 'react-bootstrap'
 

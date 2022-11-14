@@ -5,22 +5,24 @@ import { useNavigate } from 'react-router-dom'
 import {
   useAppDispatch,
   useAppSelector,
-} from '../../redux/redux-hooks/redux-hooks'
+} from '../../store/redux-hooks/redux-hooks'
 
-import Sets from '../../components/sets/sets.component'
+import WorkoutSets from '../../components/workout-sets/workout-sets.component'
 
 import {
   addSet,
   removeCurrentExercise,
   removeFromSets,
-  saveSets,
-} from '../../redux/slices/workout-slice/workout-slice'
+  saveCurrentExercise,
+} from '../../store/slices/workout/workout-slice'
+
+import { selectCurrentExercise } from '../../store/slices/workout/workout-selectors'
 
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 
 const AddSets: FC = () => {
   const dispatch = useAppDispatch()
-  const { currentExercise } = useAppSelector(state => state.workout)
+  const currentExercise = useAppSelector(selectCurrentExercise)
 
   const navigate = useNavigate()
 
@@ -41,7 +43,7 @@ const AddSets: FC = () => {
   const saveSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault()
     navigate('/add-workout-day')
-    dispatch(saveSets())
+    dispatch(saveCurrentExercise())
     dispatch(removeCurrentExercise())
   }
 
@@ -56,7 +58,7 @@ const AddSets: FC = () => {
 
             <Card.Body className='text-center'>
               <Form onSubmit={saveSubmitHandler} id='sets'>
-                <Sets />
+                <WorkoutSets />
               </Form>
             </Card.Body>
           </Card>
@@ -68,7 +70,7 @@ const AddSets: FC = () => {
             </Col>
             <Col className='flex-grow-0'>
               <Button type='submit' variant='success' form='sets'>
-                Save sets
+                Save Exercise
               </Button>
             </Col>
             <Col className='flex-grow-0'>

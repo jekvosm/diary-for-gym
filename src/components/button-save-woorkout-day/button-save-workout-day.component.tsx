@@ -1,23 +1,25 @@
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { Button, Col } from 'react-bootstrap'
 import {
   useAppDispatch,
   useAppSelector,
-} from '../../redux/redux-hooks/redux-hooks'
+} from '../../store/redux-hooks/redux-hooks'
 import {
   clearWorkoutDay,
   saveWorkoutDay,
-  WorkoutDayState,
-} from '../../redux/slices/workout-slice/workout-slice'
+} from '../../store/slices/workout/workout-slice'
+
+import { selectWorkoutDay } from '../../store/slices/workout/workout-selectors'
+
+import { WorkoutDay } from '../../store/slices/workout/workout-types'
+
+import { Button, Col } from 'react-bootstrap'
 
 const ButtonSaveWorkoutDay: FC = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const workoutDay = useAppSelector(
-    state => state.workout.workoutDay
-  ) as WorkoutDayState
+  const workoutDay = useAppSelector(selectWorkoutDay) as WorkoutDay
 
   const saveHandler = () => {
     dispatch(saveWorkoutDay(workoutDay))
