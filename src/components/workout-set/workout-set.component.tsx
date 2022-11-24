@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { FC, useState, useEffect } from 'react'
 
 import { useAppDispatch } from '../../store/redux-hooks/redux-hooks'
@@ -6,9 +7,6 @@ import { useAppDispatch } from '../../store/redux-hooks/redux-hooks'
 import { changeSets } from '../../store/slices/workout/workout-slice'
 
 import { Set } from '../../store/slices/workout/workout-types'
-
-import { ReactComponent as CheckSvg } from '../../assets/check.svg'
-import { ReactComponent as EditSvg } from '../../assets/pencil.svg'
 
 import { Col, Form, Row } from 'react-bootstrap'
 
@@ -19,28 +17,17 @@ interface SetProps {
 const WorkoutSet: FC<SetProps> = ({ set }) => {
   const dispatch = useAppDispatch()
   const { weight, reps, id } = set
-  const [newWeight, setNewWeight] = useState(weight)
-  const [newReps, setNewReps] = useState(reps)
-  const [readOnly, setReadOnly] = useState(true)
+  const [newWeightAndReps, setNewWeightAndReps] = useState(set)
 
   useEffect(() => {
-    dispatch(changeSets({ ...set, reps: newReps }))
-  }, [newReps, dispatch])
+    dispatch(changeSets(newWeightAndReps))
+  }, [newWeightAndReps, dispatch])
 
-  useEffect(() => {
-    dispatch(changeSets({ ...set, weight: newWeight }))
-  }, [newWeight, dispatch])
-
-  const onChangeReps = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewReps(Number(event.target.value))
-  }
-
-  const onChangeWeight = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewWeight(Number(event.target.value))
-  }
-
-  const readOnlyHandler = () => {
-    setReadOnly(prev => !prev)
+  const onChangeWeightAndReps = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target
+    setNewWeightAndReps({ ...newWeightAndReps, [name]: Number(value) })
   }
 
   return (
@@ -50,12 +37,11 @@ const WorkoutSet: FC<SetProps> = ({ set }) => {
       </Col>
       <Col>
         <Form.Control
-          onChange={onChangeWeight}
+          onChange={onChangeWeightAndReps}
           type='text'
-          defaultValue={`${weight}`}
+          value={weight}
           className='w-75 text-center'
-          plaintext={readOnly}
-          readOnly={readOnly}
+          name='weight'
           maxLength={4}
         />
       </Col>
@@ -64,21 +50,13 @@ const WorkoutSet: FC<SetProps> = ({ set }) => {
       </Col>
       <Col>
         <Form.Control
-          onChange={onChangeReps}
+          onChange={onChangeWeightAndReps}
           type='text'
-          defaultValue={`${reps}`}
+          value={reps}
           className='w-75 text-center'
-          plaintext={readOnly}
-          readOnly={readOnly}
+          name='reps'
           maxLength={2}
         />
-      </Col>
-      <Col onClick={readOnlyHandler}>
-        {readOnly ? (
-          <EditSvg style={{ width: '30px', height: '30px' }} />
-        ) : (
-          <CheckSvg style={{ width: '30px', height: '30px' }} />
-        )}
       </Col>
     </Form.Group>
   )

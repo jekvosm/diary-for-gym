@@ -26,9 +26,9 @@ const WorkoutSets: FC = () => {
         <Col>
           <span>Reps</span>
         </Col>
-        <Col>
+        {/* <Col>
           <span>Edit</span>
-        </Col>
+        </Col> */}
       </Row>
       <Row>
         <Col>

@@ -1,4 +1,5 @@
 import { combineReducers, configureStore, Middleware } from '@reduxjs/toolkit'
+
 import logger from 'redux-logger'
 
 import {
@@ -15,18 +16,20 @@ import {
 import storage from 'redux-persist/lib/storage'
 
 import calendarReducer from './slices/calendar/calendar-slice'
+import userSlice from './slices/user/user-slice'
 import workoutReducer from './slices/workout/workout-slice'
 
 const reducers = combineReducers({
   calendar: calendarReducer,
   workout: workoutReducer,
+  user: userSlice,
 })
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: ['calendar'],
+  blacklist: ['calendar', 'user'],
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers)

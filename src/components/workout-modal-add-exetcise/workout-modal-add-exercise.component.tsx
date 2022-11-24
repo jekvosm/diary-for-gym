@@ -58,7 +58,7 @@ const WorkoutModalAddExercise: FC = () => {
               placeholder='Entrer exercise title'
               autoFocus
               required
-            ></Form.Control>
+            />
           </Form.Group>
         </Form>
       </Modal.Body>

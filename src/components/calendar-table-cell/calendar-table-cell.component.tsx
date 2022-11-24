@@ -18,7 +18,7 @@ import {
 
 import { Day } from '../../store/slices/calendar/calendar-types'
 
-import { whichMonth } from '../../utils/calendar.utils'
+import { whichMonth } from '../../utils/calendar/calendar.utils'
 
 interface CellTableProps {
   day: Day

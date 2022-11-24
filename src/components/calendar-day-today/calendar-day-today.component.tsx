@@ -11,7 +11,10 @@ import {
   setDayToday,
 } from '../../store/slices/calendar/calendar-slice'
 
-import { changeMonthName, whichMonth } from '../../utils/calendar.utils'
+import {
+  changeMonthName,
+  whichMonth,
+} from '../../utils/calendar/calendar.utils'
 
 import { Col } from 'react-bootstrap'
 

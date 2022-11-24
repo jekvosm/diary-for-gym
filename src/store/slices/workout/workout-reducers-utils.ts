@@ -15,8 +15,8 @@ export const createExercise = (
 export const createSet = (currentExercise: Exercise): Set => {
   return {
     id: currentExercise.sets.length + 1,
-    weight: 0,
-    reps: 0,
+    weight: 10,
+    reps: 10,
   }
 }
 

@@ -1,4 +1,4 @@
-import { MONTHS } from '../../../utils/calendar.utils'
+import { MONTHS } from '../../../utils/calendar/calendar.utils'
 import { CalendarState } from './calendar-types'
 
 export const setInitialState = (): CalendarState => {

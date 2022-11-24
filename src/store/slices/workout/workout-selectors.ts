@@ -5,15 +5,15 @@ export const selectWorkout = (state: RootState) => state.workout
 
 export const selectWorkoutDay = createSelector(
   [selectWorkout],
-  selectWorkout => selectWorkout.workoutDay
+  workout => workout.workoutDay
 )
 
 export const selectShowModal = createSelector(
   [selectWorkout],
-  selectWorkout => selectWorkout.showModal
+  workout => workout.showModal
 )
 
 export const selectCurrentExercise = createSelector(
   [selectWorkout],
-  selectWorkout => selectWorkout.currentExercise
+  workout => workout.currentExercise
 )

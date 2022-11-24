@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useAppSelector } from '../../store/redux-hooks/redux-hooks'
 import { selectActiveDate } from '../../store/slices/calendar/calendar-selectors'
 
-import { changeMonthName } from '../../utils/calendar.utils'
+import { changeMonthName } from '../../utils/calendar/calendar.utils'
 
 import { Col } from 'react-bootstrap'
 

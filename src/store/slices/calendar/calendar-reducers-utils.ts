@@ -1,4 +1,4 @@
-import { MONTHS, whichMonth } from '../../../utils/calendar.utils'
+import { MONTHS, whichMonth } from '../../../utils/calendar/calendar.utils'
 
 import {
   ActiveDate,
