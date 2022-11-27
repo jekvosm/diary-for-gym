@@ -19,19 +19,19 @@ const AuthSignUpForm = () => {
     setFormFields(defaultFormFields)
   }
 
-  const signUpWithEmailAndPasswordHandler = async (
+  const signUpWithEmailAndPasswordHandler = (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault()
 
-    try {
-      await dispatch(
-        signUpWithEmailAndPassword({ email, password, displayName })
-      )
-      resetFormFields()
-    } catch (error) {
-      console.log('user sign in failed', error)
+    if (password !== confirmPassword) {
+      alert('Password does not match with confirm password!')
+      setFormFields({ ...formFields, password: '', confirmPassword: '' })
+      return
     }
+
+    dispatch(signUpWithEmailAndPassword({ email, password, displayName }))
+    resetFormFields()
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +55,7 @@ const AuthSignUpForm = () => {
               placeholder='Mike'
               name='displayName'
               value={displayName}
+              required
             />
           </FloatingLabel>
           <FloatingLabel label='Email address'>
@@ -64,6 +65,7 @@ const AuthSignUpForm = () => {
               placeholder='name@example.ru'
               name='email'
               value={email}
+              required
             />
           </FloatingLabel>
 
@@ -74,6 +76,7 @@ const AuthSignUpForm = () => {
               placeholder='name@example.ru'
               name='password'
               value={password}
+              required
             />
           </FloatingLabel>
 
@@ -84,6 +87,7 @@ const AuthSignUpForm = () => {
               placeholder='name@example.ru'
               name='confirmPassword'
               value={confirmPassword}
+              required
             />
           </FloatingLabel>
         </Form.Group>

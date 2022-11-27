@@ -3,9 +3,12 @@ import { initializeApp } from 'firebase/app'
 import {
   getAuth,
   signInWithPopup,
-  createUserWithEmailAndPassword,
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
   User,
+  onAuthStateChanged,
 } from 'firebase/auth'
 
 import {
@@ -79,10 +82,45 @@ export const createUserDocumentFromAuth = async (
   return userSnapshot as QueryDocumentSnapshot<UserData>
 }
 
+export const getUserDataFromUserSnapshot = async (
+  userSnapshot: QueryDocumentSnapshot<UserData>
+): Promise<UserData> => {
+  const userData = userSnapshot.data()
+  const createdAt = userData.createdAt as Timestamp
+  return {
+    ...userData,
+    createdAt: createdAt.toDate().toString(),
+  }
+}
+
 export const createAuthUserWithEmailAndPassword = async (
   email: string,
   password: string
 ) => {
   if (!email || !password) return
+
   return await createUserWithEmailAndPassword(auth, email, password)
+}
+
+export const signInAuthUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
+  if (!email || !password) return
+  return await signInWithEmailAndPassword(auth, email, password)
+}
+
+export const signOutAuth = async () => await signOut(auth)
+
+export const getUserAuth = (): Promise<User | null> => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      userAuth => {
+        unsubscribe()
+        resolve(userAuth)
+      },
+      reject
+    )
+  })
 }

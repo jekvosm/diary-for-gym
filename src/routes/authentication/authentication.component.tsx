@@ -3,7 +3,7 @@ import AuthSignUpForm from '../../components/auth-sign-up-form/auth-sign-up-form
 
 import { Col, Container, Row } from 'react-bootstrap'
 
-const SignIn = () => {
+const Authentication = () => {
   return (
     <Container>
       <Row>
@@ -17,4 +17,4 @@ const SignIn = () => {
     </Container>
   )
 }
-export default SignIn
+export default Authentication

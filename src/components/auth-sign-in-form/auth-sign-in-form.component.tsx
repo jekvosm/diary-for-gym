@@ -1,7 +1,13 @@
 import { useState, Fragment } from 'react'
-import { Button, Col, FloatingLabel, Form, Stack } from 'react-bootstrap'
+
 import { useAppDispatch } from '../../store/redux-hooks/redux-hooks'
-import { signInWithGoogle } from '../../store/slices/user/user-slice'
+
+import {
+  signInWithEmailAndPassword,
+  signInWithGoogle,
+} from '../../store/slices/user/user-slice'
+
+import { Button, Col, FloatingLabel, Form, Stack } from 'react-bootstrap'
 
 const defaultFormFields = {
   email: '',
@@ -13,22 +19,21 @@ const AuthSignInForm = () => {
   const { email, password } = formFields
   const dispatch = useAppDispatch()
 
-  // const resetFormFields = () => {
-  //   setFormFields(defaultFormFields)
-  // }
+  const resetFormFields = () => {
+    setFormFields(defaultFormFields)
+  }
 
   const signInWithGoogleHandler = async () => await dispatch(signInWithGoogle())
 
-  // const handleSubmit = async event => {
-  //   event.preventDefault()
+  const signInWithEmailAndPasswordHandler = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault()
 
-  //   try {
-  //     await signInAuthUserWithEmailAndPassword(email, password)
-  //     resetFormFields()
-  //   } catch (error) {
-  //     console.log('user sign in failed', error)
-  //   }
-  // }
+    dispatch(signInWithEmailAndPassword({ email, password }))
+
+    resetFormFields()
+  }
 
   const handlerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -42,7 +47,7 @@ const AuthSignInForm = () => {
         <h2>Already have an account?</h2>
         <span>Sign in with your email and password</span>
       </div>
-      <Form>
+      <Form onSubmit={signInWithEmailAndPasswordHandler}>
         <Form.Group className='d-flex flex-column gap-3 mb-3'>
           <FloatingLabel label='Email address'>
             <Form.Control
@@ -51,6 +56,7 @@ const AuthSignInForm = () => {
               placeholder='name@example.ru'
               name='email'
               value={email}
+              required
             />
           </FloatingLabel>
 
@@ -61,13 +67,16 @@ const AuthSignInForm = () => {
               placeholder='name@example.ru'
               name='password'
               value={password}
+              required
             />
           </FloatingLabel>
         </Form.Group>
         <Stack direction='horizontal' className='justify-content-between'>
           <Button onClick={signInWithGoogleHandler}>Sign In With Google</Button>
 
-          <Button variant='success'>Sign In</Button>
+          <Button type='submit' variant='success'>
+            Sign In
+          </Button>
         </Stack>
       </Form>
     </Fragment>
