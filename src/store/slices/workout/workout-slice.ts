@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { ActiveDate } from '../calendar/calendar-types'
 import { Exercise, Set, WorkoutDay, WorkoutState } from './workout-types'
@@ -11,12 +11,57 @@ import {
   saveExerciseInWorkoutDay,
   updateWorkoutDays,
 } from './workout-reducers-utils'
+import {
+  addCollectionAndDocuments,
+  getWorkoutAndDocuments,
+} from '../../../utils/firebase/firebase.utils'
+
+type addWorkoutProps = {
+  collectionKey: string | undefined
+  workoutDays: WorkoutDay[]
+}
+
+export const syncWorkout = createAsyncThunk<
+  undefined,
+  addWorkoutProps,
+  { rejectValue: string }
+>(
+  'user/syncWorkout',
+  async ({ collectionKey, workoutDays }, { rejectWithValue }) => {
+    try {
+      await addCollectionAndDocuments<WorkoutDay>(collectionKey, workoutDays)
+    } catch (error) {
+      const { message } = error as Error
+
+      return rejectWithValue(message)
+    }
+  }
+)
+
+export const fetchWorkoutDays = createAsyncThunk<
+  WorkoutDay[] | void,
+  string | undefined,
+  { rejectValue: string }
+>('user/fetchWorkoutDays', async (collectionKey, { rejectWithValue }) => {
+  try {
+    if (!collectionKey) return
+    const workoutData = await getWorkoutAndDocuments(collectionKey)
+    return workoutData
+  } catch (error) {
+    const { message } = error as Error
+
+    return rejectWithValue(message)
+  }
+})
 
 const initialState: WorkoutState = {
   currentExercise: null,
   showModal: false,
   workoutDays: [],
   workoutDay: null,
+  statusSync: 'idle',
+  error: '',
+  statusFetchWorkoutData: 'idle',
 }
 
 export const workoutSlice = createSlice({
@@ -93,6 +138,32 @@ export const workoutSlice = createSlice({
     closeModal: state => {
       state.showModal = false
     },
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(syncWorkout.pending, state => {
+        state.statusSync = 'pending'
+      })
+      .addCase(syncWorkout.fulfilled, state => {
+        state.statusSync = 'succeeded'
+      })
+      .addCase(syncWorkout.rejected, state => {
+        state.statusSync = 'failed'
+      })
+      .addCase(fetchWorkoutDays.pending, state => {
+        state.statusFetchWorkoutData = 'pending'
+      })
+      .addCase(fetchWorkoutDays.fulfilled, (state, action) => {
+        state.statusFetchWorkoutData = 'succeeded'
+        if (action.payload) {
+          state.workoutDays = action.payload
+        } else {
+          state.workoutDays = []
+        }
+      })
+      .addCase(fetchWorkoutDays.rejected, state => {
+        state.statusFetchWorkoutData = 'failed'
+      })
   },
 })
 

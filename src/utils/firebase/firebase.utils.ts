@@ -18,7 +18,12 @@ import {
   setDoc,
   QueryDocumentSnapshot,
   Timestamp,
+  collection,
+  writeBatch,
+  getDocs,
+  query,
 } from 'firebase/firestore'
+import { WorkoutDay } from '../../store/slices/workout/workout-types'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCIANrEo-cHDlkEA9XVF98s-_ghN3VqCj8',
@@ -41,7 +46,7 @@ export const auth = getAuth()
 
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 
-export const db = getFirestore()
+export const db = getFirestore(firebaseApp)
 
 export type AdditionalInformation = {
   displayName?: string
@@ -123,4 +128,37 @@ export const getUserAuth = (): Promise<User | null> => {
       reject
     )
   })
+}
+
+export interface ObjectToAdd {
+  id: string
+}
+
+export const addCollectionAndDocuments = async <T extends ObjectToAdd>(
+  collectionKey: string | undefined,
+  objectsToAdd: T[]
+): Promise<void> => {
+  if (!collectionKey || !objectsToAdd) return
+
+  const collectionRef = collection(db, collectionKey)
+  const batch = writeBatch(db)
+
+  objectsToAdd.forEach(object => {
+    const docRef = doc(collectionRef, object.id)
+    batch.set(docRef, object)
+  })
+
+  await batch.commit()
+}
+
+export const getWorkoutAndDocuments = async (
+  collectionKey: string | undefined
+): Promise<WorkoutDay[] | void> => {
+  if (!collectionKey) return
+  const collectionRef = collection(db, collectionKey)
+  const q = query(collectionRef)
+
+  const querySnapshot = await getDocs(q)
+
+  return querySnapshot.docs.map(docSnapshot => docSnapshot.data() as WorkoutDay)
 }

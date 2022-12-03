@@ -1,4 +1,9 @@
-import { createSlice, createAsyncThunk, isAnyOf } from '@reduxjs/toolkit'
+import {
+  createSlice,
+  createAsyncThunk,
+  isAnyOf,
+  PayloadAction,
+} from '@reduxjs/toolkit'
 import { User } from 'firebase/auth'
 
 import {
@@ -48,7 +53,11 @@ export const signInWithGoogle = createAsyncThunk<
 
     dispatch(signIn(user))
   } catch (error) {
-    const { message } = error as Error
+    const { message, code } = error as NodeJS.ErrnoException
+
+    if (code === 'auth/popup-closed-by-user') {
+      return rejectWithValue('Sign in with Google cancled by user.')
+    }
     return rejectWithValue(message)
   }
 })
@@ -97,13 +106,20 @@ export const signInWithEmailAndPassword = createAsyncThunk<
         email,
         password
       )
+
       if (userCredential) {
         const { user } = userCredential
 
         dispatch(signIn(user))
       }
     } catch (error) {
-      const { message } = error as Error
+      const { message, code } = error as NodeJS.ErrnoException
+      switch (code) {
+        case 'auth/wrong-password':
+          return rejectWithValue('Wrong password.')
+        case 'auth/user-not-found':
+          return rejectWithValue('User not found.')
+      }
       return rejectWithValue(message)
     }
   }
@@ -142,17 +158,23 @@ export const checkUserSession = createAsyncThunk<
 type UserState = {
   currentUser: UserData | null
   status: 'idle' | 'pending' | 'succeeded' | 'failed'
+  error: string
 }
 
 const initialState: UserState = {
   currentUser: null,
   status: 'idle',
+  error: '',
 }
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    setErrorMessage: (state, action: PayloadAction<string>) => {
+      state.error = action.payload
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(signIn.fulfilled, (state, action) => {
@@ -163,9 +185,10 @@ const userSlice = createSlice({
       })
       .addMatcher(
         isAnyOf(signOutUser.fulfilled, checkUserSession.fulfilled),
-        (state, action) => {
+        state => {
           state.status = 'succeeded'
           state.currentUser = null
+          state.error = ''
         }
       )
       .addMatcher(
@@ -179,6 +202,7 @@ const userSlice = createSlice({
         ),
         state => {
           state.status = 'pending'
+          state.error = ''
         }
       )
       .addMatcher(
@@ -190,8 +214,9 @@ const userSlice = createSlice({
           signOutUser.rejected,
           checkUserSession.rejected
         ),
-        state => {
+        (state, action) => {
           state.status = 'failed'
+          if (action.payload) state.error = action.payload
         }
       )
       .addMatcher(
@@ -202,9 +227,12 @@ const userSlice = createSlice({
         ),
         state => {
           state.status = 'succeeded'
+          state.error = ''
         }
       )
   },
 })
+
+export const { setErrorMessage } = userSlice.actions
 
 export default userSlice.reducer

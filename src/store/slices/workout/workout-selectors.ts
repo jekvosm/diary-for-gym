@@ -17,3 +17,8 @@ export const selectCurrentExercise = createSelector(
   [selectWorkout],
   workout => workout.currentExercise
 )
+
+export const selectWorkoutDays = createSelector(
+  [selectWorkout],
+  workout => workout.workoutDays
+)

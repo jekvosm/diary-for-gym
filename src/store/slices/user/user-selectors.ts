@@ -7,3 +7,10 @@ export const selectCurrentUser = createSelector(
   [selectUser],
   user => user.currentUser
 )
+
+export const selectCurrentUserEmail = createSelector(
+  [selectCurrentUser],
+  currentUser => currentUser?.email
+)
+
+export const selectError = createSelector([selectUser], user => user.error)

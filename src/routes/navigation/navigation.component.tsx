@@ -26,11 +26,7 @@ const Navigation = () => {
 
       navigate(pathname, { replace: true })
     } else if (location.pathname === '/auth') {
-      console.log(location)
       navigate('/')
-      // } else {
-      //   console.log(location)
-      //   navigate('/', { replace: true })
     }
   }, [currentUser])
 

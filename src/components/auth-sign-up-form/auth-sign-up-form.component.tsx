@@ -1,7 +1,10 @@
 import React, { useState, Fragment } from 'react'
 import { Button, FloatingLabel, Form, Stack } from 'react-bootstrap'
 import { useAppDispatch } from '../../store/redux-hooks/redux-hooks'
-import { signUpWithEmailAndPassword } from '../../store/slices/user/user-slice'
+import {
+  setErrorMessage,
+  signUpWithEmailAndPassword,
+} from '../../store/slices/user/user-slice'
 
 const defaultFormFields = {
   displayName: '',
@@ -25,7 +28,9 @@ const AuthSignUpForm = () => {
     event.preventDefault()
 
     if (password !== confirmPassword) {
-      alert('Password does not match with confirm password!')
+      dispatch(
+        setErrorMessage('Password does not match with confirm password!')
+      )
       setFormFields({ ...formFields, password: '', confirmPassword: '' })
       return
     }
