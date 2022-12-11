@@ -2,6 +2,7 @@ export interface MonthAndYear {
   month: number
   year: number
   activeDateForChange: ActiveDateForChange
+  allIdWorkoutDays: string[]
 }
 
 export interface MonthAndYearToday {
@@ -10,10 +11,11 @@ export interface MonthAndYearToday {
 }
 
 export interface Day {
-  id: number
+  id: string
   dayValue: number
   whichMonthInTable: string
   isActive: boolean
+  isTrainingDay: boolean
 }
 
 export interface ActiveDate {

@@ -127,6 +127,10 @@ export const workoutSlice = createSlice({
       }
     },
 
+    clearWorkoutDaysAfterSignout: state => {
+      state.workoutDays = []
+    },
+
     clearWorkoutDay: state => {
       state.workoutDay = null
     },
@@ -178,6 +182,7 @@ export const {
   saveCurrentExercise,
   saveWorkoutDay,
   clearWorkoutDay,
+  clearWorkoutDaysAfterSignout,
   openModal,
   closeModal,
 } = workoutSlice.actions

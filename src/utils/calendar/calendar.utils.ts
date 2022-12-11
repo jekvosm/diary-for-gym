@@ -20,6 +20,7 @@ export enum whichMonth {
 }
 
 export const changeMonthName = (month: string): string => {
+  month = month.toLowerCase()
   const lastChar = month.at(-1)
 
   if (lastChar === 'т') {

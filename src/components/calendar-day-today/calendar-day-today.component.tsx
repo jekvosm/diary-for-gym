@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import {
   useAppDispatch,
   useAppSelector,
@@ -11,20 +9,19 @@ import {
   setDayToday,
 } from '../../store/slices/calendar/calendar-slice'
 
-import {
-  changeMonthName,
-  whichMonth,
-} from '../../utils/calendar/calendar.utils'
+import useMemoChangeMonthName from '../../custom-hooks/calendar-hooks/useMemoChangeMonthName'
+
+import { whichMonth } from '../../utils/calendar/calendar.utils'
 
 import { Col } from 'react-bootstrap'
 
-const DayToday = () => {
+const CalendarDayToday = () => {
   const { dayNow, nameMonthNow, monthNowValue, yearNow, nameWeekdayNow } =
     useAppSelector(selectDayToday)
 
   const dispatch = useAppDispatch()
 
-  const monthName = useMemo(() => changeMonthName(nameMonthNow), [nameMonthNow])
+  const monthNameNow = useMemoChangeMonthName(nameMonthNow)
 
   const setDayTodayHandler = () => {
     dispatch(
@@ -45,10 +42,10 @@ const DayToday = () => {
       <h1
         onClick={setDayTodayHandler}
         className=''
-      >{`${dayNow} ${monthName} ${yearNow} г.`}</h1>
+      >{`${dayNow} ${monthNameNow} ${yearNow} г.`}</h1>
       <span>{`${nameWeekdayNow.toUpperCase()}`}</span>
     </Col>
   )
 }
 
-export default DayToday
+export default CalendarDayToday

@@ -7,6 +7,7 @@ import {
 } from '../../store/redux-hooks/redux-hooks'
 import { selectCurrentUser } from '../../store/slices/user/user-selectors'
 import { signOutUser } from '../../store/slices/user/user-slice'
+import { clearWorkoutDaysAfterSignout } from '../../store/slices/workout/workout-slice'
 
 interface stateType {
   from: { pathname: string }
@@ -30,6 +31,12 @@ const Navigation = () => {
     }
   }, [currentUser])
 
+  const signOutHandler = () => {
+    dispatch(signOutUser())
+    dispatch(clearWorkoutDaysAfterSignout())
+    navigate('/')
+  }
+
   return (
     <Fragment>
       <Navbar collapseOnSelect expand='sm' style={{ height: '10vh' }}>
@@ -51,10 +58,7 @@ const Navigation = () => {
                 <Nav.Link
                   as={Button}
                   variant=''
-                  onClick={() => {
-                    dispatch(signOutUser())
-                    navigate('/')
-                  }}
+                  onClick={signOutHandler}
                   className='fs-4 text-uppercase'
                   tabIndex={0}
                   eventKey='2'

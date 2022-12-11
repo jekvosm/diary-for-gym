@@ -25,7 +25,7 @@ interface CellTableProps {
 }
 
 const CalendarTableCell: FC<CellTableProps> = ({ day }) => {
-  const { dayValue, whichMonthInTable, isActive } = day
+  const { dayValue, whichMonthInTable, isActive, isTrainingDay } = day
 
   const dispatch = useAppDispatch()
 
@@ -94,7 +94,9 @@ const CalendarTableCell: FC<CellTableProps> = ({ day }) => {
         !isActive
           ? 'today-cell'
           : ''
-      } ${isActive ? 'active-cell' : ''}`}
+      } ${isActive ? 'active-cell' : ''} ${
+        isTrainingDay ? 'training-day' : ''
+      }`}
     >
       {dayValue}
     </td>

@@ -22,3 +22,7 @@ export const selectWorkoutDays = createSelector(
   [selectWorkout],
   workout => workout.workoutDays
 )
+
+export const selectAllIdWorkoutDays = createSelector([selectWorkout], workout =>
+  workout.workoutDays.map(workoutDay => workoutDay.id)
+)

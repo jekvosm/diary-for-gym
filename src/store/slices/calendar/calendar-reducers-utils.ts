@@ -14,8 +14,14 @@ export function createArrayOfWeeks({
   year,
   month,
   activeDateForChange,
+  allIdWorkoutDays,
 }: MonthAndYear): Week[] {
-  const daysForTable = createDaysForTable(year, month, activeDateForChange)
+  const daysForTable = createDaysForTable(
+    year,
+    month,
+    activeDateForChange,
+    allIdWorkoutDays
+  )
 
   let week: Week = {
     id: null!,
@@ -47,7 +53,8 @@ export function createArrayOfWeeks({
 function createDaysForTable(
   year: number,
   month: number,
-  activeDateForChange: ActiveDateForChange
+  activeDateForChange: ActiveDateForChange,
+  allIdWorkoutDays: string[]
 ): Day[] {
   const daysForTable = [] as Day[]
   const { dayActive, monthActive, yearActive } = activeDateForChange
@@ -60,11 +67,14 @@ function createDaysForTable(
   const dayBefore = new Date(year, month - 1, 0).getDate()
 
   for (let i = 0; i < weekdayStartMonth; i++) {
+    const id = `${year}-${month}-${dayBefore - weekdayStartMonth + i + 1}`
+
     const dayTable: Day = {
-      id: i + 1,
+      id,
       dayValue: dayBefore - weekdayStartMonth + i + 1,
       whichMonthInTable: whichMonth.monthBefore,
       isActive: false,
+      isTrainingDay: allIdWorkoutDays.includes(id),
     }
 
     daysForTable.push(dayTable)
@@ -79,11 +89,14 @@ function createDaysForTable(
   let isActive = monthActive === month && yearActive === year
 
   for (let i = 1; i <= 42 - weekdayStartMonth; i++) {
+    const id = `${year}-${month}-${i}`
+
     const dayTable: Day = {
-      id: i + weekdayStartMonth,
+      id,
       dayValue: i,
       whichMonthInTable: whichMonth.monthInTable,
       isActive: isActive && i === dayActive,
+      isTrainingDay: allIdWorkoutDays.includes(id),
     }
 
     i <= dayEndMonth

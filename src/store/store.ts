@@ -29,7 +29,7 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: ['calendar', 'user'],
+  blacklist: ['calendar', 'user', 'workout'],
 }
 
 const persistedReducer = persistReducer(persistConfig, reducers)

@@ -88,14 +88,17 @@ export const signUpWithEmailAndPassword = createAsyncThunk<
         dispatch(signIn(user))
       }
     } catch (error) {
-      const { message } = error as Error
+      const { message, code } = error as NodeJS.ErrnoException
+      if (code === 'auth/email-already-in-use') {
+        return rejectWithValue('Email already in use.')
+      }
       return rejectWithValue(message)
     }
   }
 )
 
 export const signInWithEmailAndPassword = createAsyncThunk<
-  undefined,
+  void,
   EmailAndPassword,
   { rejectValue: string }
 >(
@@ -126,8 +129,8 @@ export const signInWithEmailAndPassword = createAsyncThunk<
 )
 
 export const signOutUser = createAsyncThunk<
-  undefined,
-  undefined,
+  void,
+  void,
   { rejectValue: string }
 >('user/signOutUser', async (_, { rejectWithValue }) => {
   try {
@@ -139,8 +142,8 @@ export const signOutUser = createAsyncThunk<
 })
 
 export const checkUserSession = createAsyncThunk<
-  null | undefined,
-  undefined,
+  null | void,
+  void,
   { rejectValue: string }
 >('user/checkUserSession', async (_, { rejectWithValue, dispatch }) => {
   try {

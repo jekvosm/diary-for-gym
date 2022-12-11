@@ -1,19 +1,20 @@
 import { FC, useEffect } from 'react'
 
-import CalendarTableHead from '../calendar-table-head/calendar-table-head.component'
-import CalendarTableBody from '../calendar-table-body/calendar-table-body.component'
-
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../store/redux-hooks/redux-hooks'
 
+import { changeWeeksTable } from '../../store/slices/calendar/calendar-slice'
+
 import {
   selectActiveDate,
   selectDateTable,
 } from '../../store/slices/calendar/calendar-selectors'
+import { selectAllIdWorkoutDays } from '../../store/slices/workout/workout-selectors'
 
-import { changeWeeksTable } from '../../store/slices/calendar/calendar-slice'
+import CalendarTableHead from '../calendar-table-head/calendar-table-head.component'
+import CalendarTableBody from '../calendar-table-body/calendar-table-body.component'
 
 import { Table } from 'react-bootstrap'
 
@@ -28,6 +29,8 @@ const CalendarTable: FC = () => {
   const { activeDay, activeMonthValue, activeYear } =
     useAppSelector(selectActiveDate)
 
+  const allIdWorkoutDays = useAppSelector(selectAllIdWorkoutDays)
+
   useEffect(() => {
     dispatch(
       changeWeeksTable({
@@ -38,6 +41,7 @@ const CalendarTable: FC = () => {
           monthActive: activeMonthValue,
           yearActive: activeYear,
         },
+        allIdWorkoutDays,
       })
     )
   }, [
@@ -47,6 +51,7 @@ const CalendarTable: FC = () => {
     activeDay,
     activeMonthValue,
     activeYear,
+    allIdWorkoutDays,
   ])
 
   return (
