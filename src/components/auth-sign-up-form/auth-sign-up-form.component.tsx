@@ -48,12 +48,12 @@ const AuthSignUpForm = () => {
   return (
     <Fragment>
       <div className='mb-2'>
-        <h2>Don't have an account?</h2>
-        <span>Sign up with your email and password</span>
+        <h2>Нет аккаунта?</h2>
+        <span>Регистрация</span>
       </div>
       <Form onSubmit={signUpWithEmailAndPasswordHandler}>
         <Form.Group className='d-flex flex-column gap-3 mb-3'>
-          <FloatingLabel label='Display name'>
+          <FloatingLabel label='Имя пользователя'>
             <Form.Control
               onChange={handleChange}
               type='text'
@@ -63,7 +63,7 @@ const AuthSignUpForm = () => {
               required
             />
           </FloatingLabel>
-          <FloatingLabel label='Email address'>
+          <FloatingLabel label='Email'>
             <Form.Control
               onChange={handleChange}
               type='email'
@@ -74,7 +74,7 @@ const AuthSignUpForm = () => {
             />
           </FloatingLabel>
 
-          <FloatingLabel label='Password'>
+          <FloatingLabel label='Пароль'>
             <Form.Control
               onChange={handleChange}
               type='password'
@@ -85,7 +85,7 @@ const AuthSignUpForm = () => {
             />
           </FloatingLabel>
 
-          <FloatingLabel label='Confirm password'>
+          <FloatingLabel label='Повторить пароль'>
             <Form.Control
               onChange={handleChange}
               type='password'
@@ -98,7 +98,7 @@ const AuthSignUpForm = () => {
         </Form.Group>
         <Stack direction='horizontal' className='justify-content-end'>
           <Button type='submit' variant='success'>
-            Sign Up
+            Зарегистрироваться
           </Button>
         </Stack>
       </Form>

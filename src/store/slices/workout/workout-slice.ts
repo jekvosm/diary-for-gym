@@ -59,9 +59,10 @@ const initialState: WorkoutState = {
   showModal: false,
   workoutDays: [],
   workoutDay: null,
-  statusSync: 'idle',
-  error: '',
+  statusSyncData: 'idle',
+  messageSyncData: '',
   statusFetchWorkoutData: 'idle',
+  error: '',
 }
 
 export const workoutSlice = createSlice({
@@ -103,13 +104,15 @@ export const workoutSlice = createSlice({
       }
     },
 
-    saveCurrentExercise: state => {
-      const { currentExercise } = state
-
-      if (state.workoutDay && currentExercise) {
+    saveCurrentExercise: (state, action: PayloadAction<Exercise | null>) => {
+      if (state.workoutDay && action.payload) {
         state.workoutDay.exercises = saveExerciseInWorkoutDay(
           state.workoutDay,
-          currentExercise
+          action.payload
+        )
+        state.workoutDays = updateWorkoutDays(
+          state.workoutDays,
+          state.workoutDay
         )
       }
     },
@@ -118,7 +121,7 @@ export const workoutSlice = createSlice({
       state.workoutDay = getWorkoutDay(state.workoutDays, action.payload)
     },
 
-    saveWorkoutDay: (state, action: PayloadAction<WorkoutDay>) => {
+    saveWorkoutDay: state => {
       if (state.workoutDay) {
         state.workoutDays = updateWorkoutDays(
           state.workoutDays,
@@ -127,7 +130,7 @@ export const workoutSlice = createSlice({
       }
     },
 
-    clearWorkoutDaysAfterSignout: state => {
+    clearWorkoutDaysAfterSignOut: state => {
       state.workoutDays = []
     },
 
@@ -142,17 +145,25 @@ export const workoutSlice = createSlice({
     closeModal: state => {
       state.showModal = false
     },
+
+    setSyncMessage: (state, action: PayloadAction<string>) => {
+      state.messageSyncData = action.payload
+    },
   },
   extraReducers: builder => {
     builder
       .addCase(syncWorkout.pending, state => {
-        state.statusSync = 'pending'
+        state.statusSyncData = 'pending'
       })
       .addCase(syncWorkout.fulfilled, state => {
-        state.statusSync = 'succeeded'
+        state.statusSyncData = 'succeeded'
+        state.messageSyncData = 'Данные сохранены!'
       })
-      .addCase(syncWorkout.rejected, state => {
-        state.statusSync = 'failed'
+      .addCase(syncWorkout.rejected, (state, action) => {
+        state.statusSyncData = 'failed'
+        if (action.payload) {
+          state.error = action.payload
+        }
       })
       .addCase(fetchWorkoutDays.pending, state => {
         state.statusFetchWorkoutData = 'pending'
@@ -165,8 +176,11 @@ export const workoutSlice = createSlice({
           state.workoutDays = []
         }
       })
-      .addCase(fetchWorkoutDays.rejected, state => {
+      .addCase(fetchWorkoutDays.rejected, (state, action) => {
         state.statusFetchWorkoutData = 'failed'
+        if (action.payload) {
+          state.error = action.payload
+        }
       })
   },
 })
@@ -182,7 +196,8 @@ export const {
   saveCurrentExercise,
   saveWorkoutDay,
   clearWorkoutDay,
-  clearWorkoutDaysAfterSignout,
+  clearWorkoutDaysAfterSignOut,
+  setSyncMessage,
   openModal,
   closeModal,
 } = workoutSlice.actions

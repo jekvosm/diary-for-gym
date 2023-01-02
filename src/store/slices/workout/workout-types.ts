@@ -23,7 +23,8 @@ export interface WorkoutState {
   workoutDay: WorkoutDay | null
   workoutDays: WorkoutDay[]
   showModal: boolean
-  statusSync: 'idle' | 'pending' | 'succeeded' | 'failed'
-  error: string
+  statusSyncData: 'idle' | 'pending' | 'succeeded' | 'failed'
+  messageSyncData: string
   statusFetchWorkoutData: 'idle' | 'pending' | 'succeeded' | 'failed'
+  error: string
 }

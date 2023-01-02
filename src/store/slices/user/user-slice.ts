@@ -24,17 +24,19 @@ type EmailAndPassword = {
 }
 
 export const signIn = createAsyncThunk<
-  UserData | undefined,
-  User,
+  UserData | null,
+  User | null,
   { rejectValue: string }
 >('user/signIn', async (user, { rejectWithValue }) => {
   try {
+    if (!user) return null
+
     const userSnapshot = await createUserDocumentFromAuth(user)
 
-    if (userSnapshot) {
-      const userData = await getUserDataFromUserSnapshot(userSnapshot)
-      return userData
-    }
+    if (!userSnapshot) return null
+
+    const userData = await getUserDataFromUserSnapshot(userSnapshot)
+    return userData
   } catch (error) {
     const { message } = error as Error
     return rejectWithValue(message)
@@ -42,8 +44,8 @@ export const signIn = createAsyncThunk<
 })
 
 export const signInWithGoogle = createAsyncThunk<
-  undefined,
-  undefined,
+  void,
+  void,
   { rejectValue: string }
 >('user/signInWithGoogle', async (_, { rejectWithValue, dispatch }) => {
   try {
@@ -63,7 +65,7 @@ export const signInWithGoogle = createAsyncThunk<
 })
 
 export const signUpWithEmailAndPassword = createAsyncThunk<
-  UserData | undefined,
+  UserData | void,
   EmailAndPassword & AdditionalInformation,
   { rejectValue: string }
 >(
@@ -149,8 +151,6 @@ export const checkUserSession = createAsyncThunk<
   try {
     const user = await getUserAuth()
 
-    if (!user) return user
-
     dispatch(signIn(user))
   } catch (error) {
     const { message } = error as Error
@@ -160,13 +160,15 @@ export const checkUserSession = createAsyncThunk<
 
 type UserState = {
   currentUser: UserData | null
-  status: 'idle' | 'pending' | 'succeeded' | 'failed'
+  statusLoadingUser: 'idle' | 'pending' | 'succeeded' | 'failed'
+  statusSignOutUser: 'idle' | 'pending' | 'succeeded' | 'failed'
   error: string
 }
 
 const initialState: UserState = {
   currentUser: null,
-  status: 'idle',
+  statusLoadingUser: 'idle',
+  statusSignOutUser: 'idle',
   error: '',
 }
 
@@ -181,30 +183,34 @@ const userSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(signIn.fulfilled, (state, action) => {
-        state.status = 'succeeded'
+        state.statusLoadingUser = 'succeeded'
         if (action.payload) {
           state.currentUser = action.payload
         }
       })
-      .addMatcher(
-        isAnyOf(signOutUser.fulfilled, checkUserSession.fulfilled),
-        state => {
-          state.status = 'succeeded'
-          state.currentUser = null
-          state.error = ''
-        }
-      )
+      .addCase(signOutUser.pending, state => {
+        state.statusSignOutUser = 'pending'
+        state.error = ''
+      })
+      .addCase(signOutUser.fulfilled, state => {
+        state.statusSignOutUser = 'succeeded'
+        state.currentUser = null
+        state.error = ''
+      })
+      .addCase(signOutUser.rejected, state => {
+        state.statusSignOutUser = 'failed'
+        state.error = ''
+      })
       .addMatcher(
         isAnyOf(
           signInWithGoogle.pending,
           signInWithEmailAndPassword.pending,
           signUpWithEmailAndPassword.pending,
           signIn.pending,
-          signOutUser.pending,
           checkUserSession.pending
         ),
         state => {
-          state.status = 'pending'
+          state.statusLoadingUser = 'pending'
           state.error = ''
         }
       )
@@ -214,23 +220,13 @@ const userSlice = createSlice({
           signInWithEmailAndPassword.rejected,
           signUpWithEmailAndPassword.rejected,
           signIn.rejected,
-          signOutUser.rejected,
           checkUserSession.rejected
         ),
         (state, action) => {
-          state.status = 'failed'
-          if (action.payload) state.error = action.payload
-        }
-      )
-      .addMatcher(
-        isAnyOf(
-          signInWithGoogle.fulfilled,
-          signInWithEmailAndPassword.fulfilled,
-          signUpWithEmailAndPassword.fulfilled
-        ),
-        state => {
-          state.status = 'succeeded'
-          state.error = ''
+          state.statusLoadingUser = 'failed'
+          if (action.payload) {
+            state.error = action.payload
+          }
         }
       )
   },

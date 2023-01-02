@@ -5,6 +5,7 @@ import { selectCurrentUser } from '../../store/slices/user/user-selectors'
 const RequireAuth = () => {
   const currentUser = useAppSelector(selectCurrentUser)
   const location = useLocation()
+
   return currentUser ? (
     <Outlet />
   ) : (

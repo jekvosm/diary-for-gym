@@ -44,12 +44,12 @@ const AuthSignInForm = () => {
   return (
     <Fragment>
       <div className='mb-2'>
-        <h2>Already have an account?</h2>
-        <span>Sign in with your email and password</span>
+        <h2>Уже есть аккаут?</h2>
+        <span>Войти с помощью почты и пароля</span>
       </div>
       <Form onSubmit={signInWithEmailAndPasswordHandler}>
         <Form.Group className='d-flex flex-column gap-3 mb-3'>
-          <FloatingLabel label='Email address'>
+          <FloatingLabel label='Email'>
             <Form.Control
               onChange={handlerChange}
               type='email'
@@ -60,7 +60,7 @@ const AuthSignInForm = () => {
             />
           </FloatingLabel>
 
-          <FloatingLabel label='Password'>
+          <FloatingLabel label='Пароль'>
             <Form.Control
               onChange={handlerChange}
               type='password'
@@ -72,10 +72,12 @@ const AuthSignInForm = () => {
           </FloatingLabel>
         </Form.Group>
         <Stack direction='horizontal' className='justify-content-between'>
-          <Button onClick={signInWithGoogleHandler}>Sign In With Google</Button>
+          <Button onClick={signInWithGoogleHandler}>
+            Войти с помощью Google
+          </Button>
 
           <Button type='submit' variant='success'>
-            Sign In
+            Войти
           </Button>
         </Stack>
       </Form>

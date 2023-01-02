@@ -1,39 +1,32 @@
-import { Fragment, useEffect } from 'react'
-import { useLocation, useNavigate, Link, Outlet } from 'react-router-dom'
-import { Button, Container, Nav, Navbar } from 'react-bootstrap'
+import { Fragment } from 'react'
+
+import { useNavigate, Link, Outlet } from 'react-router-dom'
+
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../store/redux-hooks/redux-hooks'
-import { selectCurrentUser } from '../../store/slices/user/user-selectors'
-import { signOutUser } from '../../store/slices/user/user-slice'
-import { clearWorkoutDaysAfterSignout } from '../../store/slices/workout/workout-slice'
 
-interface stateType {
-  from: { pathname: string }
-}
+import { signOutUser } from '../../store/slices/user/user-slice'
+import { clearWorkoutDaysAfterSignOut } from '../../store/slices/workout/workout-slice'
+
+import { selectCurrentUser } from '../../store/slices/user/user-selectors'
+
+import WithSpinner from '../../components/with-spinner/with-spinner.component'
+
+import { Button, Container, Nav, Navbar } from 'react-bootstrap'
+
+const OutletWithSpinner = WithSpinner(Outlet)
 
 const Navigation = () => {
   const dispatch = useAppDispatch()
   const currentUser = useAppSelector(selectCurrentUser)
 
   const navigate = useNavigate()
-  const location = useLocation()
-
-  useEffect(() => {
-    if (location.state) {
-      const { from } = location.state as stateType
-      const { pathname } = from
-
-      navigate(pathname, { replace: true })
-    } else if (location.pathname === '/auth') {
-      navigate('/')
-    }
-  }, [currentUser])
 
   const signOutHandler = () => {
     dispatch(signOutUser())
-    dispatch(clearWorkoutDaysAfterSignout())
+    dispatch(clearWorkoutDaysAfterSignOut())
     navigate('/')
   }
 
@@ -48,7 +41,7 @@ const Navigation = () => {
             tabIndex={0}
             eventKey='1'
           >
-            HOME
+            DFG
           </Nav.Link>
 
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
@@ -63,7 +56,7 @@ const Navigation = () => {
                   tabIndex={0}
                   eventKey='2'
                 >
-                  SIGN OUT
+                  Выйти
                 </Nav.Link>
               ) : (
                 <Nav.Link
@@ -73,14 +66,15 @@ const Navigation = () => {
                   tabIndex={0}
                   eventKey='2'
                 >
-                  SIGN IN
+                  Войти
                 </Nav.Link>
               )}
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Outlet />
+
+      <OutletWithSpinner />
     </Fragment>
   )
 }

@@ -15,21 +15,19 @@ const WorkoutSets: FC = () => {
     <Fragment>
       <Row className='mb-3'>
         <Col>
-          <span>Set</span>
+          <span>Сет</span>
         </Col>
         <Col>
-          <span>Weight</span>
+          <span>Вес</span>
         </Col>
         <Col>
           <span>x</span>
         </Col>
         <Col>
-          <span>Reps</span>
+          <span>Повторения</span>
         </Col>
-        {/* <Col>
-          <span>Edit</span>
-        </Col> */}
       </Row>
+
       <Row>
         <Col>
           {currentExercise?.sets.length ? (

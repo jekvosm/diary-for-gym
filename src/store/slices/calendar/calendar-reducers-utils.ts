@@ -66,8 +66,18 @@ function createDaysForTable(
 
   const dayBefore = new Date(year, month - 1, 0).getDate()
 
+  let monthBeforeInTable = month - 1
+  let yearBeforeInTable = year
+
+  if (!monthBeforeInTable) {
+    yearBeforeInTable = year - 1
+    monthBeforeInTable = 12
+  }
+
   for (let i = 0; i < weekdayStartMonth; i++) {
-    const id = `${year}-${month}-${dayBefore - weekdayStartMonth + i + 1}`
+    const id = `${yearBeforeInTable}-${monthBeforeInTable}-${
+      dayBefore - weekdayStartMonth + i + 1
+    }`
 
     const dayTable: Day = {
       id,
@@ -88,12 +98,25 @@ function createDaysForTable(
 
   let isActive = monthActive === month && yearActive === year
 
+  let monthAfterInTable = month + 1
+  let yearAfterInTable = year
+
+  if (monthAfterInTable === 13) {
+    yearAfterInTable = year + 1
+    monthAfterInTable = 1
+  }
+
   for (let i = 1; i <= 42 - weekdayStartMonth; i++) {
-    const id = `${year}-${month}-${i}`
+    const dayValue = i <= dayEndMonth ? i : i - dayEndMonth
+
+    const id =
+      i <= dayEndMonth
+        ? `${year}-${month}-${dayValue}`
+        : `${yearAfterInTable}-${monthAfterInTable}-${dayValue}`
 
     const dayTable: Day = {
       id,
-      dayValue: i,
+      dayValue,
       whichMonthInTable: whichMonth.monthInTable,
       isActive: isActive && i === dayActive,
       isTrainingDay: allIdWorkoutDays.includes(id),
@@ -103,7 +126,6 @@ function createDaysForTable(
       ? daysForTable.push(dayTable)
       : daysForTable.push({
           ...dayTable,
-          dayValue: i - dayEndMonth,
           whichMonthInTable: whichMonth.monthAfter,
           isActive: false,
         })

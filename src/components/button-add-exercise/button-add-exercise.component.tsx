@@ -15,7 +15,7 @@ const ButtonAddExercise: FC = () => {
 
   return (
     <Col className='flex-grow-0 fs-4'>
-      <Button onClick={openModalHandler}>Add Exercise</Button>
+      <Button onClick={openModalHandler}>Добавить упражнение</Button>
     </Col>
   )
 }

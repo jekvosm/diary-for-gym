@@ -28,9 +28,9 @@ const AddSets: FC = () => {
 
   useEffect(() => {
     if (!currentExercise) {
-      navigate('/add-workout-day')
+      navigate('/')
     }
-  }, [navigate, currentExercise])
+  }, [currentExercise])
 
   const addSetHandler = () => {
     dispatch(addSet())
@@ -43,7 +43,7 @@ const AddSets: FC = () => {
   const saveSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault()
     navigate('/add-workout-day')
-    dispatch(saveCurrentExercise())
+    dispatch(saveCurrentExercise(currentExercise))
     dispatch(removeCurrentExercise())
   }
 
@@ -65,16 +65,16 @@ const AddSets: FC = () => {
           <Row className='text-nowrap justify-content-between m-0'>
             <Col className='flex-grow-0'>
               <Button onClick={removeSetHandler} variant='danger'>
-                Remove set
+                Удалить сет
               </Button>
             </Col>
             <Col className='flex-grow-0'>
               <Button type='submit' variant='success' form='sets'>
-                Save Exercise
+                Сохранить упражнение
               </Button>
             </Col>
             <Col className='flex-grow-0'>
-              <Button onClick={addSetHandler}>Add set</Button>
+              <Button onClick={addSetHandler}>Добавить сет</Button>
             </Col>
           </Row>
         </Col>

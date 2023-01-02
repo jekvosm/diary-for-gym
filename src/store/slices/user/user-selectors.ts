@@ -13,4 +13,9 @@ export const selectCurrentUserEmail = createSelector(
   currentUser => currentUser?.email
 )
 
+export const selectIsLoadingUser = createSelector(
+  [selectUser],
+  user => user.statusLoadingUser === 'pending'
+)
+
 export const selectError = createSelector([selectUser], user => user.error)

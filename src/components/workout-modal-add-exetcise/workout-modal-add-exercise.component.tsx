@@ -44,18 +44,18 @@ const WorkoutModalAddExercise: FC = () => {
   return (
     <Modal centered show={showModal} onHide={closeHandler}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Exercise</Modal.Title>
+        <Modal.Title>Добавить упражнение</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <Form onSubmit={handleSubmit} id='form-modal-add-exercise'>
           <Form.Group className='mb-3'>
-            <Form.Label>Exercise Title</Form.Label>
+            <Form.Label>Наименование упражнения</Form.Label>
 
             <Form.Control
               onChange={handleChange}
               type='text'
-              placeholder='Entrer exercise title'
+              placeholder='Введите наименование упражнения'
               autoFocus
               required
             />
@@ -65,11 +65,11 @@ const WorkoutModalAddExercise: FC = () => {
 
       <Modal.Footer>
         <Button onClick={closeHandler} variant='secondary'>
-          Close
+          Закрыть
         </Button>
 
         <Button type='submit' variant='primary' form='form-modal-add-exercise'>
-          Save
+          Сохранить
         </Button>
       </Modal.Footer>
     </Modal>
