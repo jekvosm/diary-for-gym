@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/diary-for-gym/static/css/main.d7b7a852.css",
+    "main.js": "/diary-for-gym/static/js/main.82889726.js",
+    "index.html": "/diary-for-gym/index.html",
+    "main.d7b7a852.css.map": "/diary-for-gym/static/css/main.d7b7a852.css.map",
+    "main.82889726.js.map": "/diary-for-gym/static/js/main.82889726.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d7b7a852.css",
+    "static/js/main.82889726.js"
+  ]
+}
