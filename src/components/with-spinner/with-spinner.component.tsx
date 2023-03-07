@@ -1,15 +1,23 @@
 import { FC } from 'react'
-import { Col, Container, Row, Spinner } from 'react-bootstrap'
+
 import { useAppSelector } from '../../store/redux-hooks/redux-hooks'
-import { selectIsLoadingUser } from '../../store/slices/user/user-selectors'
+
+import {
+  selectIsLoadingSignOut,
+  selectIsLoadingUser,
+} from '../../store/slices/user/user-selectors'
+
 import { selectIsLoadingWorkoutDays } from '../../store/slices/workout/workout-selectors'
+
+import { Col, Container, Row, Spinner } from 'react-bootstrap'
 
 const WithSpinner = (Component: FC): React.FC => {
   const SpinnerComponent = ({ ...props }) => {
     const isLoadingCheckUser = useAppSelector(selectIsLoadingUser)
     const isLoadingWorkoutDays = useAppSelector(selectIsLoadingWorkoutDays)
+    const isLoadingSignOut = useAppSelector(selectIsLoadingSignOut)
 
-    return isLoadingCheckUser || isLoadingWorkoutDays ? (
+    return isLoadingCheckUser || isLoadingWorkoutDays || isLoadingSignOut ? (
       <Container>
         <Row
           style={{ height: '90vh' }}

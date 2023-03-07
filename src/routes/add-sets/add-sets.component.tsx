@@ -1,13 +1,13 @@
 import React from 'react'
+
 import { FC, useEffect } from 'react'
+
 import { useNavigate } from 'react-router-dom'
 
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../store/redux-hooks/redux-hooks'
-
-import WorkoutSets from '../../components/workout-sets/workout-sets.component'
 
 import {
   addSet,
@@ -18,11 +18,16 @@ import {
 
 import { selectCurrentExercise } from '../../store/slices/workout/workout-selectors'
 
+import { selectCurrentUser } from '../../store/slices/user/user-selectors'
+
+import WorkoutSets from '../../components/workout-sets/workout-sets.component'
+
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 
 const AddSets: FC = () => {
   const dispatch = useAppDispatch()
   const currentExercise = useAppSelector(selectCurrentExercise)
+  const currentUser = useAppSelector(selectCurrentUser)
 
   const navigate = useNavigate()
 
@@ -30,6 +35,7 @@ const AddSets: FC = () => {
     if (!currentExercise) {
       navigate('/')
     }
+    //eslint-disable-next-line
   }, [currentExercise])
 
   const addSetHandler = () => {
@@ -42,16 +48,16 @@ const AddSets: FC = () => {
 
   const saveSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault()
-    navigate('/add-workout-day')
+    navigate(`/${currentUser?.displayName}/add-workout-day`)
     dispatch(saveCurrentExercise(currentExercise))
     dispatch(removeCurrentExercise())
   }
 
   return (
-    <Container>
+    <Container className='add-sets'>
       <Row className='justify-content-center'>
-        <Col className='flex-grow-0'>
-          <Card style={{ width: '32rem' }} className='mb-3'>
+        <Col>
+          <Card className='mb-3'>
             <Card.Header className='text-center'>
               <h2>{currentExercise?.title}</h2>
             </Card.Header>
@@ -62,7 +68,7 @@ const AddSets: FC = () => {
               </Form>
             </Card.Body>
           </Card>
-          <Row className='text-nowrap justify-content-between m-0'>
+          <Row className='text-nowrap justify-content-center m-0 gap-2'>
             <Col className='flex-grow-0'>
               <Button onClick={removeSetHandler} variant='danger'>
                 Удалить сет

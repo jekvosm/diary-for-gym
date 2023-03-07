@@ -18,4 +18,9 @@ export const selectIsLoadingUser = createSelector(
   user => user.statusLoadingUser === 'pending'
 )
 
+export const selectIsLoadingSignOut = createSelector(
+  [selectUser],
+  user => user.statusSignOutUser === 'pending'
+)
+
 export const selectError = createSelector([selectUser], user => user.error)

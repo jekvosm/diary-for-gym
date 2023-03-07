@@ -13,7 +13,7 @@ const CalendarActiveDate = () => {
   const monthName = useMemoChangeMonthName(activeMonthName)
 
   return (
-    <Col className='text-center border border-1 border-dark'>
+    <Col className='text-center border border-1 border-white'>
       <span className='fs-4'>{`${activeDay} ${monthName} ${activeYear}`}</span>
     </Col>
   )

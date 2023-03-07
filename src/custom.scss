@@ -1,24 +1,101 @@
-// @import '~bootstrap/scss/functions';
-// @import '../node_modules/bootstrap/scss/variables';
-
-@import '~bootstrap/scss/bootstrap';
+@import '../node_modules/bootstrap/scss/bootstrap';
 
 body {
-  background-color: $teal-200;
+  background-color: $gray-900;
+  color: $gray-200;
+}
+
+#root {
+  position: relative;
+  min-height: 100vh;
+}
+
+.navbar {
+  height: 10vh;
+  margin-bottom: 3rem;
+}
+
+.navbar-expand-sm .navbar-nav .nav-link {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.navbar-nav .nav-link.active {
+  color: $gray-200;
+
+  &:hover {
+    background-color: #00cccc;
+    color: #000000;
+  }
+}
+
+.logo {
+  height: 50px;
+  width: 100px;
+  background-color: #00cccc;
+  padding: 5px 10px;
+  border-radius: 7px;
+}
+
+.accent-button {
+  display: block;
+  color: $gray-200;
+  background-color: $gray-900;
+  border: 2px solid #00cccc;
+  border-radius: 7px;
+  padding: 5px 15px;
+
+  --bs-btn-hover-color: $gray-900;
+  --bs-btn-hover-bg: #00cccc;
+  --bs-btn-hover-border-color: #00cccc78;
+  --bs-btn-focus-shadow-rgb: 0, 204, 204;
+  --bs-btn-active-border-color: #00cccc;
+  --bs-btn-active-bg: $gray-900;
+
+  &:hover {
+    background-color: #00cccc;
+    color: #000000;
+  }
+}
+
+.navbar-toggler {
+  background-color: #00cccc;
+}
+
+.form-floating {
+  color: $gray-900;
+}
+
+.bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url('../src/assets/hero-image-bg.jpg') no-repeat center;
+  background-size: cover;
+  min-height: 100vh;
+  width: 100vw;
+  opacity: 30%;
+  z-index: -999;
 }
 
 .calendar {
-  width: 25rem;
+  max-width: 25rem;
+
+  .table {
+    color: #fff;
+  }
 
   .month-before {
+    color: $gray-700;
+
     &:hover {
       color: $gray-900;
     }
-    color: $gray-500;
   }
 
   .month-after {
-    color: $gray-500;
+    color: $gray-700;
+
     &:hover {
       color: $gray-900;
     }
@@ -26,18 +103,39 @@ body {
 
   td {
     &.active-cell {
+      color: $gray-900;
       background-color: $cyan;
     }
 
     &.today-cell {
+      color: $gray-900;
       background-color: $success;
     }
 
     &:hover {
+      color: $gray-900;
       background-color: $cyan;
     }
   }
   .training-day {
-    border: 2px rgb(52, 54, 94) solid;
+    border: 3px rgb(52, 54, 94) solid;
+  }
+}
+
+.modal-content {
+  color: $gray-100;
+  background-color: #3a4949;
+
+  .form-control::placeholder {
+    color: $gray-900;
+  }
+}
+
+.add-sets {
+  .card {
+    color: $gray-100;
+    background-color: $gray-800;
+    max-width: 32rem;
+    margin: 0 auto;
   }
 }

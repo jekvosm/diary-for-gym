@@ -23,7 +23,7 @@ const Calendar: FC = () => {
         <CalendarTable />
       </Row>
 
-      <Row className='text-nowrap'>
+      <Row className='text-nowrap gap-3 justify-content-center'>
         <CalendarActiveDate />
         <ButtonAddDay />
       </Row>
