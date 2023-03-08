@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/diary-for-gym/static/css/main.b6edc9b8.css",
-    "main.js": "/diary-for-gym/static/js/main.43079bd7.js",
+    "main.js": "/diary-for-gym/static/js/main.4cd85ad9.js",
     "static/media/hero-image-bg.jpg": "/diary-for-gym/static/media/hero-image-bg.273d8f4fdf7d47221140.jpg",
     "static/media/new-logo-color.svg": "/diary-for-gym/static/media/new-logo-color.39c2cfb1fc3179fb9bbec4a8a8254488.svg",
     "index.html": "/diary-for-gym/index.html",
     "main.b6edc9b8.css.map": "/diary-for-gym/static/css/main.b6edc9b8.css.map",
-    "main.43079bd7.js.map": "/diary-for-gym/static/js/main.43079bd7.js.map"
+    "main.4cd85ad9.js.map": "/diary-for-gym/static/js/main.4cd85ad9.js.map"
   },
   "entrypoints": [
     "static/css/main.b6edc9b8.css",
-    "static/js/main.43079bd7.js"
+    "static/js/main.4cd85ad9.js"
   ]
 }
