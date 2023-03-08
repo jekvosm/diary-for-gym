@@ -5,7 +5,11 @@ import {
   useAppSelector,
 } from '../../store/redux-hooks/redux-hooks'
 
-import { changeWeeksTable } from '../../store/slices/calendar/calendar-slice'
+import {
+  changeWeeksTable,
+  decreaseMonth,
+  increaseMonth,
+} from '../../store/slices/calendar/calendar-slice'
 
 import {
   selectActiveDate,
@@ -16,10 +20,17 @@ import { selectAllIdWorkoutDays } from '../../store/slices/workout/workout-selec
 import CalendarTableHead from '../calendar-table-head/calendar-table-head.component'
 import CalendarTableBody from '../calendar-table-body/calendar-table-body.component'
 
+import useSwipe from '../../custom-hooks/swip-hook/use-swipe'
+
 import { Table } from 'react-bootstrap'
 
 const CalendarTable: FC = () => {
   const dispatch = useAppDispatch()
+
+  const swipeHandlers = useSwipe({
+    onSwipedLeft: () => dispatch(decreaseMonth()),
+    onSwipedRight: () => dispatch(increaseMonth()),
+  })
 
   const {
     monthTable: { monthTableValue },
@@ -55,7 +66,7 @@ const CalendarTable: FC = () => {
   ])
 
   return (
-    <Table borderless>
+    <Table borderless {...swipeHandlers}>
       <CalendarTableHead />
       <CalendarTableBody />
     </Table>
