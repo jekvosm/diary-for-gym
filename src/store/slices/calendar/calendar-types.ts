@@ -13,6 +13,7 @@ export interface MonthAndYearToday {
 export interface Day {
   id: string
   dayValue: number
+  nameWeekDay: string
   whichMonthInTable: string
   isActive: boolean
   isTrainingDay: boolean
@@ -21,6 +22,7 @@ export interface Day {
 export interface ActiveDate {
   id: string
   activeDay: number
+  activeWeekDayName: string
   activeMonthValue: number
   activeMonthName: string
   activeYear: number
@@ -28,6 +30,7 @@ export interface ActiveDate {
 
 export interface DayForActiveDate {
   dayValue: number
+  nameWeekDay: string
   monthTableValue: number
   nameMonthTable: string
   yearTable: number

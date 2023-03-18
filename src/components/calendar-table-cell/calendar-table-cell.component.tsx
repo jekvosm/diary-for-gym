@@ -25,7 +25,8 @@ interface CellTableProps {
 }
 
 const CalendarTableCell: FC<CellTableProps> = ({ day }) => {
-  const { dayValue, whichMonthInTable, isActive, isTrainingDay } = day
+  const { dayValue, whichMonthInTable, isActive, isTrainingDay, nameWeekDay } =
+    day
 
   const dispatch = useAppDispatch()
 
@@ -42,6 +43,7 @@ const CalendarTableCell: FC<CellTableProps> = ({ day }) => {
       dispatch(
         setActiveDate({
           dayValue,
+          nameWeekDay,
           monthTableValue,
           yearTable,
           nameMonthTable,
@@ -56,6 +58,7 @@ const CalendarTableCell: FC<CellTableProps> = ({ day }) => {
       dispatch(
         setActiveDate({
           dayValue,
+          nameWeekDay,
           monthTableValue,
           yearTable,
           nameMonthTable,
@@ -68,6 +71,7 @@ const CalendarTableCell: FC<CellTableProps> = ({ day }) => {
     dispatch(
       setActiveDate({
         dayValue,
+        nameWeekDay,
         monthTableValue,
         yearTable,
         nameMonthTable,
@@ -76,6 +80,7 @@ const CalendarTableCell: FC<CellTableProps> = ({ day }) => {
     )
   }, [
     dayValue,
+    nameWeekDay,
     monthTableValue,
     yearTable,
     dispatch,

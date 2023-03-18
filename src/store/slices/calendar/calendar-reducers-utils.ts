@@ -1,4 +1,8 @@
-import { MONTHS, whichMonth } from '../../../utils/calendar/calendar.utils'
+import {
+  MONTHS,
+  WEEKDAYS,
+  whichMonth,
+} from '../../../utils/calendar/calendar.utils'
 
 import {
   ActiveDate,
@@ -79,9 +83,14 @@ function createDaysForTable(
       dayBefore - weekdayStartMonth + i + 1
     }`
 
+    const dayValue = dayBefore - weekdayStartMonth + i + 1
+
+    const weekday = new Date(id).getDay()
+
     const dayTable: Day = {
       id,
-      dayValue: dayBefore - weekdayStartMonth + i + 1,
+      nameWeekDay: WEEKDAYS[weekday],
+      dayValue,
       whichMonthInTable: whichMonth.monthBefore,
       isActive: false,
       isTrainingDay: allIdWorkoutDays.includes(id),
@@ -114,9 +123,12 @@ function createDaysForTable(
         ? `${year}-${month}-${dayValue}`
         : `${yearAfterInTable}-${monthAfterInTable}-${dayValue}`
 
+    const weekday = new Date(id).getDay()
+
     const dayTable: Day = {
       id,
       dayValue,
+      nameWeekDay: WEEKDAYS[weekday],
       whichMonthInTable: whichMonth.monthInTable,
       isActive: isActive && i === dayActive,
       isTrainingDay: allIdWorkoutDays.includes(id),
@@ -135,7 +147,8 @@ function createDaysForTable(
 }
 
 export const updateActiveDate = (date: DayForActiveDate): ActiveDate => {
-  let { dayValue, monthTableValue, yearTable, whichMonthInTable } = date
+  let { dayValue, monthTableValue, yearTable, whichMonthInTable, nameWeekDay } =
+    date
 
   if (whichMonthInTable === whichMonth.monthBefore) {
     monthTableValue = monthTableValue - 1
@@ -158,6 +171,7 @@ export const updateActiveDate = (date: DayForActiveDate): ActiveDate => {
   return {
     id: `${yearTable}-${monthTableValue}-${date.dayValue}`,
     activeDay: dayValue,
+    activeWeekDayName: nameWeekDay,
     activeMonthValue: monthTableValue,
     activeMonthName: MONTHS[monthTableValue - 1],
     activeYear: yearTable,

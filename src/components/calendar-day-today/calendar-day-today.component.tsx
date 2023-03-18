@@ -27,6 +27,7 @@ const CalendarDayToday = () => {
     dispatch(
       setActiveDate({
         dayValue: dayNow,
+        nameWeekDay: nameWeekdayNow,
         monthTableValue: monthNowValue,
         yearTable: yearNow,
         nameMonthTable: nameMonthNow,

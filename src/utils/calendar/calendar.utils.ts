@@ -13,6 +13,16 @@ export const MONTHS = [
   'Декабрь',
 ]
 
+export const WEEKDAYS = [
+  'Воскресенье',
+  'Понедельник',
+  'Вторник',
+  'Среда',
+  'Четверг',
+  'Пятница',
+  'Суббота',
+]
+
 export enum whichMonth {
   monthBefore = 'month-before',
   monthInTable = 'month-in-table',

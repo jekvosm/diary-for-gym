@@ -5,14 +5,15 @@ import { Col } from 'react-bootstrap'
 import useMemoChangeMonthName from '../../custom-hooks/calendar-hooks/useMemoChangeMonthName'
 
 const WorkoutDate = () => {
-  const { activeDay, activeMonthName, activeYear } =
+  const { activeDay, activeMonthName, activeYear, activeWeekDayName } =
     useAppSelector(selectActiveDate)
 
   const monthName = useMemoChangeMonthName(activeMonthName)
 
   return (
-    <Col className='mb-4'>
+    <Col className='mb-4 text-center fs-4'>
       <h3 className='text-center'>{`${activeDay} ${monthName} ${activeYear} г.`}</h3>
+      <span className='text-uppercase'>{activeWeekDayName}</span>
     </Col>
   )
 }

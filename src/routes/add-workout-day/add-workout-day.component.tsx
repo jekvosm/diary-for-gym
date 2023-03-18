@@ -15,7 +15,7 @@ import { selectActiveDate } from '../../store/slices/calendar/calendar-selectors
 
 import { setWorkoutDay } from '../../store/slices/workout/workout-slice'
 
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row } from 'react-bootstrap'
 
 const AddWorkoutDay: FC = () => {
   const dispatch = useAppDispatch()
@@ -28,12 +28,6 @@ const AddWorkoutDay: FC = () => {
 
   return (
     <Container className='w-75'>
-      <Row>
-        <Col>
-          <h1 className='fs-3 text-center mb-4'>Тренировка</h1>
-        </Col>
-      </Row>
-
       <Row>
         <WorkoutDate />
       </Row>

@@ -50,6 +50,7 @@ export const setInitialState = (): CalendarState => {
     activeDate: {
       id: `${year}-${monthTableValue + 1}-${day}`,
       activeDay: day,
+      activeWeekDayName: nameWeekday,
       activeMonthValue: monthTableValue + 1,
       activeMonthName: MONTHS[monthTableValue],
       activeYear: year,
