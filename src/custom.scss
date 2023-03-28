@@ -139,3 +139,18 @@ body {
     margin: 0 auto;
   }
 }
+
+.add-workout-day {
+  .card-exercise {
+    color: $gray-100;
+    background-color: $gray-800;
+
+    .card-exercise-title {
+      cursor: pointer;
+
+      &:hover {
+        color: #00cccc;
+      }
+    }
+  }
+}

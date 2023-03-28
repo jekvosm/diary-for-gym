@@ -7,6 +7,8 @@ import {
   saveWorkoutDay,
 } from '../../store/slices/workout/workout-slice'
 
+import { ReactComponent as SaveSVG } from '../../assets/save.svg'
+
 import { Button, Col } from 'react-bootstrap'
 
 const ButtonSaveWorkoutDay: FC = () => {
@@ -23,7 +25,7 @@ const ButtonSaveWorkoutDay: FC = () => {
   return (
     <Col className='flex-grow-0 fs-4'>
       <Button onClick={saveHandler} variant='success'>
-        Сохранить тренировку
+        <SaveSVG width={36} height={36} />
       </Button>
     </Col>
   )

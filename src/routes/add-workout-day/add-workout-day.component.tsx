@@ -5,15 +5,13 @@ import {
   useAppSelector,
 } from '../../store/redux-hooks/redux-hooks'
 
-import WorkoutDate from '../../components/workout-date/workout-date.component'
-import WorkoutExercises from '../../components/workout-exercises/workout-exercises.component'
-import WorkoutModalAddExercise from '../../components/workout-modal-add-exetcise/workout-modal-add-exercise.component'
-import ButtonAddExercise from '../../components/button-add-exercise/button-add-exercise.component'
-import ButtonSaveWorkoutDay from '../../components/button-save-woorkout-day/button-save-workout-day.component'
+import { setWorkoutDay } from '../../store/slices/workout/workout-slice'
 
 import { selectActiveDate } from '../../store/slices/calendar/calendar-selectors'
 
-import { setWorkoutDay } from '../../store/slices/workout/workout-slice'
+import WorkoutDate from '../../components/workout-date/workout-date.component'
+import WorkoutExercises from '../../components/workout-exercises/workout-exercises.component'
+import WorkoutModalAddExercise from '../../components/workout-modal-add-exetcise/workout-modal-add-exercise.component'
 
 import { Container, Row } from 'react-bootstrap'
 
@@ -27,18 +25,13 @@ const AddWorkoutDay: FC = () => {
   }, [])
 
   return (
-    <Container className='w-75'>
+    <Container className='add-workout-day'>
       <Row>
         <WorkoutDate />
       </Row>
 
-      <Row>
+      <Row className='justify-content-center'>
         <WorkoutExercises />
-      </Row>
-
-      <Row className='text-nowrap justify-content-between mb-5 gap-2'>
-        <ButtonSaveWorkoutDay />
-        <ButtonAddExercise />
       </Row>
 
       <WorkoutModalAddExercise />
