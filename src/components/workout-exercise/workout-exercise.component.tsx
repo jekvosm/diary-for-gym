@@ -16,7 +16,7 @@ import { ReactComponent as EditSVG } from '../../assets/edit.svg'
 
 import { Button, Card, Col, Image, Row, Stack } from 'react-bootstrap'
 
-import img from '../../assets/istockphoto-475407195-1024x1024.jpg'
+import img from '../../assets/no-image-100.png'
 
 interface ExerciseProps {
   exercise: Exercise
