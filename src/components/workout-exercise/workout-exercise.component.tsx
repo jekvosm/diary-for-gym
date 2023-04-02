@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from '../../store/redux-hooks/redux-hooks'
 
-import { setCurrentExercise } from '../../store/slices/workout/workout-slice'
+import {
+  openModalEditExercise,
+  removeExercise,
+  setCurrentExercise,
+} from '../../store/slices/workout/workout-slice'
 
 import { Exercise } from '../../store/slices/workout/workout-types'
 
@@ -16,9 +20,10 @@ import img from '../../assets/istockphoto-475407195-1024x1024.jpg'
 
 interface ExerciseProps {
   exercise: Exercise
+  exerciseNumber: number
 }
 
-const WorkoutExercise: FC<ExerciseProps> = ({ exercise }) => {
+const WorkoutExercise: FC<ExerciseProps> = ({ exercise, exerciseNumber }) => {
   const { title, sets } = exercise
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -40,17 +45,22 @@ const WorkoutExercise: FC<ExerciseProps> = ({ exercise }) => {
           <Card.Body>
             <Card.Title
               onClick={goToAddSets}
-              style={{ cursor: 'pointer' }}
               className='card-exercise-title d-inline-block'
             >
-              {exercise.id}. {title}
+              {exerciseNumber + 1}. {title}
             </Card.Title>
             <Card.Text>
-              {sets.map(set => (
-                <span className='d-block text-nowrap'>
-                  Подход {set.id}&#42889; {set.weight}&times;{set.reps}
+              {sets.length ? (
+                sets.map(set => (
+                  <span key={set.id} className='d-block text-nowrap'>
+                    Подход {set.id}&#42889; {set.weight}&times;{set.reps}
+                  </span>
+                ))
+              ) : (
+                <span className='d-block text-center opacity-25'>
+                  Нажмите на упражнение и добавьте подходы
                 </span>
-              ))}
+              )}
             </Card.Text>
           </Card.Body>
         </Col>
@@ -64,11 +74,19 @@ const WorkoutExercise: FC<ExerciseProps> = ({ exercise }) => {
           right: 10,
         }}
       >
-        <Button variant='info' className='p-1'>
+        <Button
+          variant='info'
+          className='p-1'
+          onClick={() => dispatch(openModalEditExercise(exercise))}
+        >
           <EditSVG width={26} height={26} />
         </Button>
         <Button variant='danger' className='p-1'>
-          <CloseSVG width={26} height={26} />
+          <CloseSVG
+            width={26}
+            height={26}
+            onClick={() => dispatch(removeExercise(exercise.id))}
+          />
         </Button>
       </Stack>
     </Card>

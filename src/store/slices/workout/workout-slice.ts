@@ -1,7 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { ActiveDate } from '../calendar/calendar-types'
-import { Exercise, Set, WorkoutDay, WorkoutState } from './workout-types'
+import {
+  EditedExercise,
+  Exercise,
+  Set,
+  WorkoutDay,
+  WorkoutState,
+} from './workout-types'
 
 import {
   changeCurrentSets,
@@ -56,7 +62,8 @@ export const fetchWorkoutDays = createAsyncThunk<
 
 const initialState: WorkoutState = {
   currentExercise: null,
-  showModal: false,
+  showModalAddExercise: false,
+  showModalEditExercise: false,
   workoutDays: [],
   workoutDay: null,
   statusSyncData: 'idle',
@@ -73,6 +80,14 @@ export const workoutSlice = createSlice({
       if (state.workoutDay) {
         const exercise = createExercise(state.workoutDay, action.payload)
         state.workoutDay.exercises.push(exercise)
+      }
+    },
+
+    removeExercise: (state, action: PayloadAction<string>) => {
+      if (state.workoutDay) {
+        state.workoutDay.exercises = state.workoutDay.exercises.filter(
+          exercise => exercise.id !== action.payload
+        )
       }
     },
 
@@ -138,12 +153,37 @@ export const workoutSlice = createSlice({
       state.workoutDay = null
     },
 
-    openModal: state => {
-      state.showModal = true
+    openModalAddExercise: state => {
+      state.showModalAddExercise = true
     },
 
-    closeModal: state => {
-      state.showModal = false
+    closeModalAddExercise: state => {
+      state.showModalAddExercise = false
+    },
+
+    openModalEditExercise: (state, action: PayloadAction<Exercise>) => {
+      state.showModalEditExercise = true
+      state.currentExercise = action.payload
+    },
+
+    closeModalEditExercise: state => {
+      state.showModalEditExercise = false
+    },
+
+    saveEditedExercise: (state, action: PayloadAction<EditedExercise>) => {
+      if (state.workoutDay) {
+        state.workoutDay.exercises = state.workoutDay?.exercises.map(
+          exercise => {
+            if (exercise.id === action.payload.id) {
+              return {
+                ...exercise,
+                title: action.payload.title,
+              }
+            }
+            return exercise
+          }
+        )
+      }
     },
 
     setSyncMessage: (state, action: PayloadAction<string>) => {
@@ -187,6 +227,7 @@ export const workoutSlice = createSlice({
 
 export const {
   addExercise,
+  removeExercise,
   setCurrentExercise,
   setWorkoutDay,
   removeCurrentExercise,
@@ -198,8 +239,11 @@ export const {
   clearWorkoutDay,
   clearWorkoutDaysAfterSignOut,
   setSyncMessage,
-  openModal,
-  closeModal,
+  openModalAddExercise,
+  closeModalAddExercise,
+  openModalEditExercise,
+  saveEditedExercise,
+  closeModalEditExercise,
 } = workoutSlice.actions
 
 export default workoutSlice.reducer

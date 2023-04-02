@@ -11,7 +11,6 @@ import { selectActiveDate } from '../../store/slices/calendar/calendar-selectors
 
 import WorkoutDate from '../../components/workout-date/workout-date.component'
 import WorkoutExercises from '../../components/workout-exercises/workout-exercises.component'
-import WorkoutModalAddExercise from '../../components/workout-modal-add-exetcise/workout-modal-add-exercise.component'
 
 import { Container, Row } from 'react-bootstrap'
 
@@ -33,8 +32,6 @@ const AddWorkoutDay: FC = () => {
       <Row className='justify-content-center'>
         <WorkoutExercises />
       </Row>
-
-      <WorkoutModalAddExercise />
     </Container>
   )
 }

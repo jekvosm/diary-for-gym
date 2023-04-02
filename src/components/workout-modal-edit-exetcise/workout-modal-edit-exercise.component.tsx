@@ -6,21 +6,27 @@ import {
 } from '../../store/redux-hooks/redux-hooks'
 
 import {
-  addExercise,
-  closeModalAddExercise,
+  closeModalEditExercise,
+  removeCurrentExercise,
+  saveEditedExercise,
 } from '../../store/slices/workout/workout-slice'
 
-import { selectShowModalAddExercise } from '../../store/slices/workout/workout-selectors'
+import {
+  selectCurrentExercise,
+  selectShowModalEditExercise,
+} from '../../store/slices/workout/workout-selectors'
 
 import { Button, Form, Modal } from 'react-bootstrap'
+import { Exercise } from '../../store/slices/workout/workout-types'
 
-const WorkoutModalAddExercise: FC = () => {
+const WorkoutModalEditExercise: FC = () => {
   const [title, setTitle] = useState('')
 
-  const showModal = useAppSelector(selectShowModalAddExercise)
+  const showModal = useAppSelector(selectShowModalEditExercise)
+  const currentExercise = useAppSelector(selectCurrentExercise) as Exercise
 
   const dispatch = useAppDispatch()
-  const closeHandler = () => dispatch(closeModalAddExercise())
+  const closeHandler = () => dispatch(closeModalEditExercise())
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
@@ -31,31 +37,34 @@ const WorkoutModalAddExercise: FC = () => {
       return
     }
 
-    dispatch(addExercise(title))
+    dispatch(saveEditedExercise({ id: currentExercise?.id, title }))
     setTitle('')
-    dispatch(closeModalAddExercise())
+    removeCurrentExercise()
+    dispatch(closeModalEditExercise())
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
+
     setTitle(value)
   }
 
   return (
     <Modal centered show={showModal} onHide={closeHandler}>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить упражнение</Modal.Title>
+        <Modal.Title>Редактировать упражнение</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
-        <Form onSubmit={handleSubmit} id='form-modal-add-exercise'>
+        <Form onSubmit={handleSubmit} id='form-modal-edit-exercise'>
           <Form.Group className='mb-3'>
-            <Form.Label>Наименование упражнения</Form.Label>
+            <Form.Label>Редактировать наименование</Form.Label>
 
             <Form.Control
               onChange={handleChange}
               type='text'
               placeholder='Введите наименование упражнения'
+              defaultValue={currentExercise?.title}
               autoFocus
               required
             />
@@ -68,7 +77,7 @@ const WorkoutModalAddExercise: FC = () => {
           Закрыть
         </Button>
 
-        <Button type='submit' variant='primary' form='form-modal-add-exercise'>
+        <Button type='submit' variant='primary' form='form-modal-edit-exercise'>
           Сохранить
         </Button>
       </Modal.Footer>
@@ -76,4 +85,4 @@ const WorkoutModalAddExercise: FC = () => {
   )
 }
 
-export default WorkoutModalAddExercise
+export default WorkoutModalEditExercise

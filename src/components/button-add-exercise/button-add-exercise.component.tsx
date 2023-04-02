@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { useAppDispatch } from '../../store/redux-hooks/redux-hooks'
 
-import { openModal } from '../../store/slices/workout/workout-slice'
+import { openModalAddExercise } from '../../store/slices/workout/workout-slice'
 
 import { ReactComponent as AddSVG } from '../../assets/add.svg'
 
@@ -12,7 +12,7 @@ const ButtonAddExercise: FC = () => {
   const dispatch = useAppDispatch()
 
   const openModalHandler = () => {
-    dispatch(openModal())
+    dispatch(openModalAddExercise())
   }
 
   return (

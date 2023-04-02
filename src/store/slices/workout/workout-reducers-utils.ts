@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import { ActiveDate } from '../calendar/calendar-types'
 import { Exercise, Set, WorkoutDay } from './workout-types'
 
@@ -6,7 +7,7 @@ export const createExercise = (
   title: string
 ): Exercise => {
   return {
-    id: workoutDay.exercises.length + 1,
+    id: uuidv4(),
     title: title,
     sets: [] as Set[],
   }

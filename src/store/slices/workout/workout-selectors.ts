@@ -16,9 +16,14 @@ export const selectExercises = createSelector([selectWorkoutDay], workout => {
   return workout.exercises
 })
 
-export const selectShowModal = createSelector(
+export const selectShowModalAddExercise = createSelector(
   [selectWorkout],
-  workout => workout.showModal
+  workout => workout.showModalAddExercise
+)
+
+export const selectShowModalEditExercise = createSelector(
+  [selectWorkout],
+  workout => workout.showModalEditExercise
 )
 
 export const selectCurrentExercise = createSelector(
