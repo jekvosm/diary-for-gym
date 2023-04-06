@@ -151,6 +151,22 @@ export const addCollectionAndDocuments = async <T extends ObjectToAdd>(
   await batch.commit()
 }
 
+export const deleteCollectionAndDocuments = async (
+  collectionKey: string | undefined,
+  documentKey: string | undefined
+): Promise<void> => {
+  if (!collectionKey || !documentKey) return
+
+  const collectionRef = collection(db, collectionKey)
+  const docRef = doc(collectionRef, documentKey)
+
+  const batch = writeBatch(db)
+
+  batch.delete(docRef)
+
+  await batch.commit()
+}
+
 export const getWorkoutAndDocuments = async (
   collectionKey: string | undefined
 ): Promise<WorkoutDay[] | void> => {

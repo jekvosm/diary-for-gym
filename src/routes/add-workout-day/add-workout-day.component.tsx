@@ -25,7 +25,7 @@ const AddWorkoutDay: FC = () => {
 
   return (
     <Container className='add-workout-day'>
-      <Row>
+      <Row className='justify-content-center mb-3'>
         <WorkoutDate />
       </Row>
 

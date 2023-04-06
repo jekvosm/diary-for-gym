@@ -17,8 +17,10 @@ import {
   saveExerciseInWorkoutDay,
   updateWorkoutDays,
 } from './workout-reducers-utils'
+
 import {
   addCollectionAndDocuments,
+  deleteCollectionAndDocuments,
   getWorkoutAndDocuments,
 } from '../../../utils/firebase/firebase.utils'
 
@@ -36,6 +38,28 @@ export const syncWorkout = createAsyncThunk<
   async ({ collectionKey, workoutDays }, { rejectWithValue }) => {
     try {
       await addCollectionAndDocuments<WorkoutDay>(collectionKey, workoutDays)
+    } catch (error) {
+      const { message } = error as Error
+
+      return rejectWithValue(message)
+    }
+  }
+)
+
+type deleteWorkoutDayProps = {
+  collectionKey: string | undefined
+  documentKey: string | undefined
+}
+
+export const deleteWorkoutDay = createAsyncThunk<
+  undefined,
+  deleteWorkoutDayProps,
+  { rejectValue: string }
+>(
+  'user/deleteWorkoutDay',
+  async ({ collectionKey, documentKey }, { rejectWithValue }) => {
+    try {
+      await deleteCollectionAndDocuments(collectionKey, documentKey)
     } catch (error) {
       const { message } = error as Error
 
@@ -67,6 +91,7 @@ const initialState: WorkoutState = {
   workoutDays: [],
   workoutDay: null,
   statusSyncData: 'idle',
+  statusDeleteWorkoutDay: 'idle',
   messageSyncData: '',
   statusFetchWorkoutData: 'idle',
   error: '',
@@ -78,7 +103,7 @@ export const workoutSlice = createSlice({
   reducers: {
     addExercise: (state, action: PayloadAction<string>) => {
       if (state.workoutDay) {
-        const exercise = createExercise(state.workoutDay, action.payload)
+        const exercise = createExercise(action.payload)
         state.workoutDay.exercises.push(exercise)
       }
     },
@@ -221,6 +246,15 @@ export const workoutSlice = createSlice({
         if (action.payload) {
           state.error = action.payload
         }
+      })
+      .addCase(deleteWorkoutDay.pending, state => {
+        state.statusDeleteWorkoutDay = 'pending'
+      })
+      .addCase(deleteWorkoutDay.fulfilled, state => {
+        state.statusDeleteWorkoutDay = 'succeeded'
+      })
+      .addCase(deleteWorkoutDay.rejected, state => {
+        state.statusDeleteWorkoutDay = 'failed'
       })
   },
 })
