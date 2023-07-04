@@ -1,15 +1,20 @@
 {
   "files": {
-    "main.css": "/diary-for-gym/static/css/main.b6edc9b8.css",
-    "main.js": "/diary-for-gym/static/js/main.4cd85ad9.js",
+    "main.css": "/diary-for-gym/static/css/main.6fe5e2a0.css",
+    "main.js": "/diary-for-gym/static/js/main.8c4878ee.js",
     "static/media/hero-image-bg.jpg": "/diary-for-gym/static/media/hero-image-bg.273d8f4fdf7d47221140.jpg",
     "static/media/new-logo-color.svg": "/diary-for-gym/static/media/new-logo-color.39c2cfb1fc3179fb9bbec4a8a8254488.svg",
     "index.html": "/diary-for-gym/index.html",
-    "main.b6edc9b8.css.map": "/diary-for-gym/static/css/main.b6edc9b8.css.map",
-    "main.4cd85ad9.js.map": "/diary-for-gym/static/js/main.4cd85ad9.js.map"
+    "static/media/edit.svg": "/diary-for-gym/static/media/edit.44cf4cf5c678a963fb5528b80b7f5056.svg",
+    "static/media/save.svg": "/diary-for-gym/static/media/save.2e481f9810ad0a115f39a0cf85b06135.svg",
+    "static/media/delete.svg": "/diary-for-gym/static/media/delete.6cb19900f9775d05bda6e48854ece879.svg",
+    "static/media/arrow_back_black.svg": "/diary-for-gym/static/media/arrow_back_black.e44b644573a2a68c69ac8688cd36c1ca.svg",
+    "static/media/add.svg": "/diary-for-gym/static/media/add.09c9633a3b3abef99ace99a3f9f9cdc2.svg",
+    "main.6fe5e2a0.css.map": "/diary-for-gym/static/css/main.6fe5e2a0.css.map",
+    "main.8c4878ee.js.map": "/diary-for-gym/static/js/main.8c4878ee.js.map"
   },
   "entrypoints": [
-    "static/css/main.b6edc9b8.css",
-    "static/js/main.4cd85ad9.js"
+    "static/css/main.6fe5e2a0.css",
+    "static/js/main.8c4878ee.js"
   ]
 }
