@@ -1,12 +1,10 @@
+import { v4 as uuidv4 } from 'uuid'
 import { ActiveDate } from '../calendar/calendar-types'
 import { Exercise, Set, WorkoutDay } from './workout-types'
 
-export const createExercise = (
-  workoutDay: WorkoutDay,
-  title: string
-): Exercise => {
+export const createExercise = (title: string): Exercise => {
   return {
-    id: workoutDay.exercises.length + 1,
+    id: uuidv4(),
     title: title,
     sets: [] as Set[],
   }
@@ -64,6 +62,10 @@ export const updateWorkoutDays = (
   workoutDays: WorkoutDay[],
   workoutDay: WorkoutDay
 ) => {
+  if (!workoutDay.exercises.length) {
+    return workoutDays.filter(day => day.id !== workoutDay.id)
+  }
+
   const isExistWorkoutDay = workoutDays.some(day => day.id === workoutDay.id)
 
   if (isExistWorkoutDay) {

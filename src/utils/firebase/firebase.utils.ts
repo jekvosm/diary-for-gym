@@ -23,7 +23,18 @@ import {
   getDocs,
   query,
 } from 'firebase/firestore'
+
+import {
+  UploadResult,
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+} from 'firebase/storage'
+
 import { WorkoutDay } from '../../store/slices/workout/workout-types'
+
+import { v4 as uuidv4 } from 'uuid'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyCIANrEo-cHDlkEA9XVF98s-_ghN3VqCj8',
@@ -35,6 +46,8 @@ const firebaseConfig = {
 }
 
 const firebaseApp = initializeApp(firebaseConfig)
+
+const storage = getStorage(firebaseApp)
 
 const googleProvider = new GoogleAuthProvider()
 
@@ -134,19 +147,56 @@ export interface ObjectToAdd {
   id: string
 }
 
+// export const addCollectionAndDocuments = async <T extends ObjectToAdd>(
+//   collectionKey: string | undefined,
+//   objectsToAdd: T[]
+// ): Promise<void> => {
+//   if (!collectionKey || !objectsToAdd) return
+
+//   const collectionRef = collection(db, collectionKey)
+//   const batch = writeBatch(db)
+
+//   objectsToAdd.forEach(object => {
+//     const docRef = doc(collectionRef, object.id)
+//     batch.set(docRef, object)
+//   })
+
+//   await batch.commit()
+// }
+
 export const addCollectionAndDocuments = async <T extends ObjectToAdd>(
   collectionKey: string | undefined,
-  objectsToAdd: T[]
+  objectToAdd: T
 ): Promise<void> => {
-  if (!collectionKey || !objectsToAdd) return
+  if (!collectionKey || !objectToAdd) return
 
   const collectionRef = collection(db, collectionKey)
+
   const batch = writeBatch(db)
 
-  objectsToAdd.forEach(object => {
-    const docRef = doc(collectionRef, object.id)
-    batch.set(docRef, object)
-  })
+  const docRef = doc(collectionRef, objectToAdd.id)
+
+  const docRefSnapshot = await getDoc(docRef)
+
+  if (docRefSnapshot.exists()) return
+
+  batch.set(docRef, objectToAdd)
+
+  await batch.commit()
+}
+
+export const deleteCollectionAndDocuments = async (
+  collectionKey: string | undefined,
+  documentKey: string | undefined
+): Promise<void> => {
+  if (!collectionKey || !documentKey) return
+
+  const collectionRef = collection(db, collectionKey)
+  const docRef = doc(collectionRef, documentKey)
+
+  const batch = writeBatch(db)
+
+  batch.delete(docRef)
 
   await batch.commit()
 }
@@ -161,4 +211,20 @@ export const getWorkoutAndDocuments = async (
   const querySnapshot = await getDocs(q)
 
   return querySnapshot.docs.map(docSnapshot => docSnapshot.data() as WorkoutDay)
+}
+
+export const uploadFileToStorage = async (
+  collectionKey: string | undefined,
+  fileName: string | undefined,
+  data: Blob | Uint8Array | ArrayBuffer
+): Promise<UploadResult | void> => {
+  if (!collectionKey) return
+
+  const fileRef = ref(storage, `${collectionKey}/${fileName + uuidv4()}`)
+
+  return await uploadBytes(fileRef, data)
+}
+
+export const getFileURL = async (snapshot: UploadResult) => {
+  return await getDownloadURL(snapshot.ref)
 }

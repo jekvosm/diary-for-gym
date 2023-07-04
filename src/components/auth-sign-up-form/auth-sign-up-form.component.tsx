@@ -76,7 +76,7 @@ const AuthSignUpForm = () => {
           <Form.Control
             onChange={handleChange}
             type='password'
-            placeholder='name@example.ru'
+            placeholder='Пароль'
             name='password'
             value={password}
             required
@@ -87,7 +87,7 @@ const AuthSignUpForm = () => {
           <Form.Control
             onChange={handleChange}
             type='password'
-            placeholder='name@example.ru'
+            placeholder='Повторить пароль'
             name='confirmPassword'
             value={confirmPassword}
             required

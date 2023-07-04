@@ -1,7 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { ActiveDate } from '../calendar/calendar-types'
-import { Exercise, Set, WorkoutDay, WorkoutState } from './workout-types'
+import {
+  EditedExercise,
+  Exercise,
+  Set,
+  WorkoutDay,
+  WorkoutState,
+} from './workout-types'
 
 import {
   changeCurrentSets,
@@ -11,25 +17,49 @@ import {
   saveExerciseInWorkoutDay,
   updateWorkoutDays,
 } from './workout-reducers-utils'
+
 import {
   addCollectionAndDocuments,
+  deleteCollectionAndDocuments,
   getWorkoutAndDocuments,
 } from '../../../utils/firebase/firebase.utils'
 
 type addWorkoutProps = {
   collectionKey: string | undefined
-  workoutDays: WorkoutDay[]
+  workoutDay: WorkoutDay
 }
 
-export const syncWorkout = createAsyncThunk<
+export const addWorkoutDayToFirebase = createAsyncThunk<
   undefined,
   addWorkoutProps,
   { rejectValue: string }
 >(
-  'user/syncWorkout',
-  async ({ collectionKey, workoutDays }, { rejectWithValue }) => {
+  'user/addWorkoutDayToFirebase',
+  async ({ collectionKey, workoutDay }, { rejectWithValue }) => {
     try {
-      await addCollectionAndDocuments<WorkoutDay>(collectionKey, workoutDays)
+      await addCollectionAndDocuments<WorkoutDay>(collectionKey, workoutDay)
+    } catch (error) {
+      const { message } = error as Error
+
+      return rejectWithValue(message)
+    }
+  }
+)
+
+type deleteWorkoutDayProps = {
+  collectionKey: string | undefined
+  documentKey: string | undefined
+}
+
+export const deleteWorkoutDay = createAsyncThunk<
+  undefined,
+  deleteWorkoutDayProps,
+  { rejectValue: string }
+>(
+  'user/deleteWorkoutDay',
+  async ({ collectionKey, documentKey }, { rejectWithValue }) => {
+    try {
+      await deleteCollectionAndDocuments(collectionKey, documentKey)
     } catch (error) {
       const { message } = error as Error
 
@@ -56,11 +86,12 @@ export const fetchWorkoutDays = createAsyncThunk<
 
 const initialState: WorkoutState = {
   currentExercise: null,
-  showModal: false,
+  showModalAddExercise: false,
+  showModalEditExercise: false,
   workoutDays: [],
   workoutDay: null,
-  statusSyncData: 'idle',
-  messageSyncData: '',
+  statusAddData: 'idle',
+  statusDeleteWorkoutDay: 'idle',
   statusFetchWorkoutData: 'idle',
   error: '',
 }
@@ -71,8 +102,16 @@ export const workoutSlice = createSlice({
   reducers: {
     addExercise: (state, action: PayloadAction<string>) => {
       if (state.workoutDay) {
-        const exercise = createExercise(state.workoutDay, action.payload)
+        const exercise = createExercise(action.payload)
         state.workoutDay.exercises.push(exercise)
+      }
+    },
+
+    removeExercise: (state, action: PayloadAction<string>) => {
+      if (state.workoutDay) {
+        state.workoutDay.exercises = state.workoutDay.exercises.filter(
+          exercise => exercise.id !== action.payload
+        )
       }
     },
 
@@ -138,29 +177,49 @@ export const workoutSlice = createSlice({
       state.workoutDay = null
     },
 
-    openModal: state => {
-      state.showModal = true
+    openModalAddExercise: state => {
+      state.showModalAddExercise = true
     },
 
-    closeModal: state => {
-      state.showModal = false
+    closeModalAddExercise: state => {
+      state.showModalAddExercise = false
     },
 
-    setSyncMessage: (state, action: PayloadAction<string>) => {
-      state.messageSyncData = action.payload
+    openModalEditExercise: (state, action: PayloadAction<Exercise>) => {
+      state.showModalEditExercise = true
+      state.currentExercise = action.payload
+    },
+
+    closeModalEditExercise: state => {
+      state.showModalEditExercise = false
+    },
+
+    saveEditedExercise: (state, action: PayloadAction<EditedExercise>) => {
+      if (state.workoutDay) {
+        state.workoutDay.exercises = state.workoutDay?.exercises.map(
+          exercise => {
+            if (exercise.id === action.payload.id) {
+              return {
+                ...exercise,
+                title: action.payload.title,
+              }
+            }
+            return exercise
+          }
+        )
+      }
     },
   },
   extraReducers: builder => {
     builder
-      .addCase(syncWorkout.pending, state => {
-        state.statusSyncData = 'pending'
+      .addCase(addWorkoutDayToFirebase.pending, state => {
+        state.statusAddData = 'pending'
       })
-      .addCase(syncWorkout.fulfilled, state => {
-        state.statusSyncData = 'succeeded'
-        state.messageSyncData = 'Данные сохранены!'
+      .addCase(addWorkoutDayToFirebase.fulfilled, state => {
+        state.statusAddData = 'succeeded'
       })
-      .addCase(syncWorkout.rejected, (state, action) => {
-        state.statusSyncData = 'failed'
+      .addCase(addWorkoutDayToFirebase.rejected, (state, action) => {
+        state.statusAddData = 'failed'
         if (action.payload) {
           state.error = action.payload
         }
@@ -182,11 +241,21 @@ export const workoutSlice = createSlice({
           state.error = action.payload
         }
       })
+      .addCase(deleteWorkoutDay.pending, state => {
+        state.statusDeleteWorkoutDay = 'pending'
+      })
+      .addCase(deleteWorkoutDay.fulfilled, state => {
+        state.statusDeleteWorkoutDay = 'succeeded'
+      })
+      .addCase(deleteWorkoutDay.rejected, state => {
+        state.statusDeleteWorkoutDay = 'failed'
+      })
   },
 })
 
 export const {
   addExercise,
+  removeExercise,
   setCurrentExercise,
   setWorkoutDay,
   removeCurrentExercise,
@@ -197,9 +266,11 @@ export const {
   saveWorkoutDay,
   clearWorkoutDay,
   clearWorkoutDaysAfterSignOut,
-  setSyncMessage,
-  openModal,
-  closeModal,
+  openModalAddExercise,
+  closeModalAddExercise,
+  openModalEditExercise,
+  saveEditedExercise,
+  closeModalEditExercise,
 } = workoutSlice.actions
 
 export default workoutSlice.reducer

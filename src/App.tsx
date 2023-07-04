@@ -38,10 +38,12 @@ const App = () => {
     <Routes>
       <Route path='/' element={<Navigation />}>
         <Route index element={<HomeOverlay />} />
+
         <Route element={<RequireAuth />}>
           <Route path='/:userId' element={<Home />} />
           <Route path='/:userId/add-workout-day/*' element={<Workout />} />
         </Route>
+
         <Route path='*' element={<PageNotFound />} />
       </Route>
 

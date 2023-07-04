@@ -5,9 +5,14 @@ export interface Set {
 }
 
 export interface Exercise {
-  id: number
+  id: string
   title: string
   sets: Set[]
+}
+
+export interface EditedExercise {
+  id: string
+  title: string
 }
 
 export interface WorkoutDay {
@@ -22,9 +27,10 @@ export interface WorkoutState {
   currentExercise: Exercise | null
   workoutDay: WorkoutDay | null
   workoutDays: WorkoutDay[]
-  showModal: boolean
-  statusSyncData: 'idle' | 'pending' | 'succeeded' | 'failed'
-  messageSyncData: string
+  showModalAddExercise: boolean
+  showModalEditExercise: boolean
+  statusAddData: 'idle' | 'pending' | 'succeeded' | 'failed'
+  statusDeleteWorkoutDay: 'idle' | 'pending' | 'succeeded' | 'failed'
   statusFetchWorkoutData: 'idle' | 'pending' | 'succeeded' | 'failed'
   error: string
 }
