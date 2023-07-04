@@ -62,12 +62,7 @@ const WorkoutModalAddExercise: FC = () => {
         <Form onSubmit={handleSubmit} id='form-modal-add-exercise'>
           <Form.Group className='mb-3'>
             <Form.Label>Добавить изображение упражнения</Form.Label>
-            <Form.Control
-              onChange={handleChangeImage}
-              type='file'
-              autoFocus
-              required
-            />
+            <Form.Control onChange={handleChangeImage} type='file' autoFocus />
 
             <Form.Label>Наименование упражнения</Form.Label>
             <Form.Control
