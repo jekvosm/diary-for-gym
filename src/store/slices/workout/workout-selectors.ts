@@ -49,8 +49,3 @@ export const selectIsLoadingWorkoutDay = createSelector(
 export const selectAllIdWorkoutDays = createSelector([selectWorkout], workout =>
   workout.workoutDays.map(workoutDay => workoutDay.id)
 )
-
-export const selectMessageSyncData = createSelector(
-  [selectWorkout],
-  workout => workout.messageSyncData
-)

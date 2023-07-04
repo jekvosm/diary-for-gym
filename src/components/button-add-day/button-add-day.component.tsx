@@ -3,7 +3,9 @@ import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Button, Col } from 'react-bootstrap'
+
 import { useAppSelector } from '../../store/redux-hooks/redux-hooks'
+
 import { selectCurrentUser } from '../../store/slices/user/user-selectors'
 
 const ButtonAddDay: FC = () => {
@@ -12,6 +14,7 @@ const ButtonAddDay: FC = () => {
 
   const goToAddWorkoutDayHandler = () => {
     navigate(`/${currentUser?.displayName}/add-workout-day`)
+    // dispatch(addWorkoutDayToFirebase({ collectionKey: userEmail, workoutDay }))
   }
 
   return (

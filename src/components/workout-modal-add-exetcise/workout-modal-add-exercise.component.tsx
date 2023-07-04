@@ -16,6 +16,7 @@ import { Button, Form, Modal } from 'react-bootstrap'
 
 const WorkoutModalAddExercise: FC = () => {
   const [title, setTitle] = useState('')
+  const [imageUpload, setImageUpload] = useState<File>()
 
   const showModal = useAppSelector(selectShowModalAddExercise)
 
@@ -36,9 +37,19 @@ const WorkoutModalAddExercise: FC = () => {
     dispatch(closeModalAddExercise())
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     setTitle(value)
+  }
+
+  const handleChangeImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.files
+
+    console.log(value)
+
+    if (value) {
+      setImageUpload(value[0])
+    }
   }
 
   return (
@@ -50,13 +61,19 @@ const WorkoutModalAddExercise: FC = () => {
       <Modal.Body>
         <Form onSubmit={handleSubmit} id='form-modal-add-exercise'>
           <Form.Group className='mb-3'>
-            <Form.Label>Наименование упражнения</Form.Label>
-
+            <Form.Label>Добавить изображение упражнения</Form.Label>
             <Form.Control
-              onChange={handleChange}
+              onChange={handleChangeImage}
+              type='file'
+              autoFocus
+              required
+            />
+
+            <Form.Label>Наименование упражнения</Form.Label>
+            <Form.Control
+              onChange={handleChangeTitle}
               type='text'
               placeholder='Введите наименование упражнения'
-              autoFocus
               required
             />
           </Form.Group>

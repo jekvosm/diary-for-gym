@@ -26,18 +26,18 @@ import {
 
 type addWorkoutProps = {
   collectionKey: string | undefined
-  workoutDays: WorkoutDay[]
+  workoutDay: WorkoutDay
 }
 
-export const syncWorkout = createAsyncThunk<
+export const addWorkoutDayToFirebase = createAsyncThunk<
   undefined,
   addWorkoutProps,
   { rejectValue: string }
 >(
-  'user/syncWorkout',
-  async ({ collectionKey, workoutDays }, { rejectWithValue }) => {
+  'user/addWorkoutDayToFirebase',
+  async ({ collectionKey, workoutDay }, { rejectWithValue }) => {
     try {
-      await addCollectionAndDocuments<WorkoutDay>(collectionKey, workoutDays)
+      await addCollectionAndDocuments<WorkoutDay>(collectionKey, workoutDay)
     } catch (error) {
       const { message } = error as Error
 
@@ -90,9 +90,8 @@ const initialState: WorkoutState = {
   showModalEditExercise: false,
   workoutDays: [],
   workoutDay: null,
-  statusSyncData: 'idle',
+  statusAddData: 'idle',
   statusDeleteWorkoutDay: 'idle',
-  messageSyncData: '',
   statusFetchWorkoutData: 'idle',
   error: '',
 }
@@ -210,22 +209,17 @@ export const workoutSlice = createSlice({
         )
       }
     },
-
-    setSyncMessage: (state, action: PayloadAction<string>) => {
-      state.messageSyncData = action.payload
-    },
   },
   extraReducers: builder => {
     builder
-      .addCase(syncWorkout.pending, state => {
-        state.statusSyncData = 'pending'
+      .addCase(addWorkoutDayToFirebase.pending, state => {
+        state.statusAddData = 'pending'
       })
-      .addCase(syncWorkout.fulfilled, state => {
-        state.statusSyncData = 'succeeded'
-        state.messageSyncData = 'Данные сохранены!'
+      .addCase(addWorkoutDayToFirebase.fulfilled, state => {
+        state.statusAddData = 'succeeded'
       })
-      .addCase(syncWorkout.rejected, (state, action) => {
-        state.statusSyncData = 'failed'
+      .addCase(addWorkoutDayToFirebase.rejected, (state, action) => {
+        state.statusAddData = 'failed'
         if (action.payload) {
           state.error = action.payload
         }
@@ -272,7 +266,6 @@ export const {
   saveWorkoutDay,
   clearWorkoutDay,
   clearWorkoutDaysAfterSignOut,
-  setSyncMessage,
   openModalAddExercise,
   closeModalAddExercise,
   openModalEditExercise,
